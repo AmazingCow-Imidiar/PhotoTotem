@@ -36,9 +36,12 @@ class Config(object):
     __ALL_FLAGS_SHORT = "";
     __ALL_FLAGS_LONG  = [__FLAG_CONFIG+"="];
 
-    __REQUIRED_KEY_CAMERA_FILENAME = "camera_config_filename";
+    __REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
+    __REQUIRED_KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
+
     __REQUIRED_KEYS = [
         __REQUIRED_KEY_CAMERA_FILENAME,
+        __REQUIRED_KEY_SCENEMANAGER_FILENAME,
     ];
 
     ############################################################################
@@ -94,6 +97,8 @@ class Config(object):
     ## Getters                                                                ##
     ############################################################################
     def get_camera_config_filename(self):
+        return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
+    def get_scene_manager_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
 
     ############################################################################

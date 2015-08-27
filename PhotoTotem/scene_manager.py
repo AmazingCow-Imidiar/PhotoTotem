@@ -155,9 +155,11 @@ class SceneManager(object):
     ############################################################################
     ## Getters Methods                                                        ##
     ############################################################################
+    #Window Properties.
     def get_window_size(self):
         return self.__file_contents[SceneManager.__REQUIRED_KEY_WINDOW_SIZE];
 
+    #Scenes Filenames.
     def get_camera_scene_filename(self):
         return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_CAMERA_FILENAME];
     def get_postphoto_scene_filename(self):
@@ -166,6 +168,14 @@ class SceneManager(object):
         return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_FILTER_FILENAME];
     def get_done_scene_filename(self):
         return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_DONE_FILENAME];
+
+    #Scenes Enabled.
+    def get_postphoto_scene_enabled(self):
+        return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_POSTPHOTO_ENABLED];
+    def get_filter_scene_enabled(self):
+        return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_FILTER_ENABLED];
+    def get_done_scene_enabled(self):
+        return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_DONE_ENABLED];
 
     ############################################################################
     ## Validation Methods                                                     ##

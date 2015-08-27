@@ -27,11 +27,13 @@ from PyQt4.QtGui import *;
 
 class GUI(object):
 
-	def show_msg_box(self, msg):
-		app    = QApplication([]);
-		window = QWidget();
+    #COWTODO: Remove the comments later.
+    def show_msg_box(self, msg):
+        print msg;
+        # app    = QApplication([]);
+        # window = QWidget();
 
-		QMessageBox.information(window, "Error", str(msg));
-		# app.exec_();
+        # QMessageBox.information(window, "Error", str(msg));
+        # app.exec_();
 
-		
+

@@ -44,13 +44,22 @@ class SceneManager(object):
     __REQUIRED_KEY_SCENE_FILTER_FILENAME    = "scene_filter_filename";
     __REQUIRED_KEY_SCENE_DONE_FILENAME      = "scene_done_filename";
 
+    #Scenes Enabled.
+    __REQUIRED_KEY_SCENE_POSTPHOTO_ENABLED = "scene_postphoto_enabled";
+    __REQUIRED_KEY_SCENE_FILTER_ENABLED    = "scene_filter_enabled";
+    __REQUIRED_KEY_SCENE_DONE_ENABLED      = "scene_done_enabled";
+
     __REQUIRED_KEYS = [
         __REQUIRED_KEY_WINDOW_SIZE,
 
         __REQUIRED_KEY_SCENE_CAMERA_FILENAME,
         __REQUIRED_KEY_SCENE_POSTPHOTO_FILENAME,
         __REQUIRED_KEY_SCENE_FILTER_FILENAME,
-        __REQUIRED_KEY_SCENE_DONE_FILENAME
+        __REQUIRED_KEY_SCENE_DONE_FILENAME,
+
+        __REQUIRED_KEY_SCENE_POSTPHOTO_ENABLED,
+        __REQUIRED_KEY_SCENE_FILTER_ENABLED,
+        __REQUIRED_KEY_SCENE_DONE_ENABLED,
     ];
 
     ############################################################################
@@ -94,6 +103,8 @@ class SceneManager(object):
 
         #Initialize the Pygame.
         self.__init_pygame();
+
+        #Initialize the Scenes.
 
 
     def __init_pygame(self):

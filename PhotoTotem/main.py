@@ -30,11 +30,17 @@ from scene_manager import SceneManager;
 def main():
     Logger.instance().log_debug("main");
 
-    #Initialize the modules.
     Config.instance().init();
+
     Camera.instance().init();
+
     SceneManager.instance().init();
+    SceneManager.instance().run();
+    SceneManager.instance().quit();
+
+    Camera.instance().quit();
+
 
 ## Script Initialization ##
-if (__name__ == "__main__"):
+if(__name__ == "__main__"):
     main();

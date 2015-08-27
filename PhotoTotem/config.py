@@ -99,7 +99,7 @@ class Config(object):
     def get_camera_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
     def get_scene_manager_config_filename(self):
-        return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
+        return self.__file_contents[Config.__REQUIRED_KEY_SCENEMANAGER_FILENAME];
 
     ############################################################################
     ## Validation Methods                                                     ##

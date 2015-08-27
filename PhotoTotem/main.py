@@ -21,9 +21,11 @@
 
 ## Imports ##
 #Project
-from config import Config;
-from camera import Camera;
-from logger import Logger;
+from config        import Config;
+from camera        import Camera;
+from logger        import Logger;
+from scene_manager import SceneManager;
+
 
 def main():
     Logger.instance().log_debug("main");
@@ -31,8 +33,7 @@ def main():
     #Initialize the modules.
     Config.instance().init();
     Camera.instance().init();
-
-    pass;
+    SceneManager.instance().init();
 
 ## Script Initialization ##
 if (__name__ == "__main__"):

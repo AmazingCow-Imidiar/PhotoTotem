@@ -20,8 +20,13 @@
 ##----------------------------------------------------------------------------##
 
 ## Imports ##
+#Python
+import os;
+import os.path;
+import json;
 #Pygame
 import pygame;
+import pygame.camera;
 #Project
 from config import Config;
 from logger import Logger;
@@ -57,9 +62,12 @@ class Camera(object):
 
         ## iVars ##
         self.__config_filename = None;
+        self.__file_contents   = None;
 
         self.__resolution = None;
         self.__device     = None;
+
+        self.__camera = None;
 
     ############################################################################
     ## Init                                                                   ##
@@ -73,6 +81,44 @@ class Camera(object):
         #Validate the configuration.
         self.__validate_config_file();
 
+        #Set the values.
+        self.__resolution = self.__file_contents[Camera.__REQUIRED_KEY_RESOLUTION];
+        self.__device     = self.__file_contents[Camera.__REQUIRED_KEY_DEVICE];
+
+        self.__init_camera_device();
+
+    def __init_camera_device(self):
+        Logger.instance().log_debug("Camera.init_camera_device");
+
+        #Initialize pygame.
+        pygame.init();
+        pygame.camera.init();
+
+        #Initialize the camera.
+        self.__camera = pygame.camera.Camera(self.__device, self.__resolution);
+        self.__camera.start();
+
+    ############################################################################
+    ## Camera Control                                                         ##
+    ############################################################################
+    def start(self):
+        #COWTODO: Implement
+        Logger.instance().log_fatal("Camera.start Not implemented yet");
+    def stop(self):
+        #COWTODO: Implement
+        Logger.instance().log_fatal("Camera.stop Not implemented yet");
+
+    def get_frame(self):
+        #COWTODO: Implement
+        Logger.instance().log_fatal("Camera.get_frame Not implemented yet");
+
+    def take_photo(self):
+        #COWTODO: Implement
+        Logger.instance().log_fatal("Camera.take_photo Not implemented yet");
+
+    ############################################################################
+    ## Validation Methods                                                     ##
+    ############################################################################
     def __validate_config_file(self):
         Logger.instance().log_debug("Camera.validate_config_file");
 
@@ -99,7 +145,7 @@ class Camera(object):
 
 
         #Check if file has the required keys.
-        for key in Config.__REQUIRED_KEYS:
+        for key in Camera.__REQUIRED_KEYS:
             if(key not in self.__file_contents):
                 msg = "{} ({}) {} ({})".format("Configuration File",
                                                filename,

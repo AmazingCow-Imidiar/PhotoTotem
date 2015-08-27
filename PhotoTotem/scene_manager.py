@@ -26,6 +26,7 @@ import os.path;
 import json;
 #Pygame
 import pygame;
+import pygame.locals;
 #Project
 from config import Config;
 from logger import Logger;
@@ -73,6 +74,12 @@ class SceneManager(object):
         self.__config_filename = None;
         self.__file_contents   = None;
 
+        #Pygame related.
+        self.__screen_surface = None;
+        self.__app_clock      = None;
+        self.__app_fps        = None;
+        self.__app_running    = None;
+
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
@@ -81,8 +88,57 @@ class SceneManager(object):
 
         #Get the configuration filename for SceneManager.
         self.__config_filename = Config.instance().get_scene_manager_config_filename();
+
         #Validate the configuration.
         self.__validate_config_file();
+
+        #Initialize the Pygame.
+        self.__init_pygame();
+
+
+    def __init_pygame(self):
+        pygame.init();
+
+        self.__app_running = False;
+
+        self.__app_clock = pygame.time.Clock();
+        self.__app_fps   = float(60.0);
+
+        self.__screen_surface = pygame.display.set_mode(self.get_window_size());
+        self.__screen_surface.fill((0,0,0));
+
+
+    ############################################################################
+    ## Run                                                                    ##
+    ############################################################################
+    def run(self):
+        Logger.instance().log_debug("SceneManager.run");
+
+        self.__app_running = True;
+        while(self.__app_running):
+            self.__handle_events();
+            self.__update();
+            self.__draw();
+
+            self.__app_clock.tick(self.__app_fps);
+
+    def __handle_events(self):
+        for event in pygame.event.get():
+            if(event.type == pygame.locals.QUIT):
+                self.__app_running = False;
+
+    def __update(self):
+        pass;
+
+    def __draw(self):
+        pygame.display.update();
+
+    ############################################################################
+    ## Quit                                                                   ##
+    ############################################################################
+    def quit(self):
+        Logger.instance().log_debug("SceneManager.quit");
+        pygame.quit();
 
 
     ############################################################################

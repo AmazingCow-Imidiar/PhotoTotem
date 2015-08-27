@@ -128,12 +128,12 @@ class SceneManager(object):
             Logger.instance().log_fatal(msg);
 
 
-        # #Check if file has the required keys.
-        # for key in SceneManager.__REQUIRED_KEYS:
-        #     if(key not in self.__file_contents):
-        #         msg = "{} ({}) {} ({})".format("Configuration File",
-        #                                        filename,
-        #                                        "doesn't have required key",
-        #                                        "SceneManager_config_filename");
-        #         Logger.instance().log_fatal(msg);
+        #Check if file has the required keys.
+        for key in SceneManager.__REQUIRED_KEYS:
+            if(key not in self.__file_contents):
+                msg = "{} ({}) {} ({})".format("Configuration File",
+                                               filename,
+                                               "doesn't have required key",
+                                               key);
+                Logger.instance().log_fatal(msg);
 

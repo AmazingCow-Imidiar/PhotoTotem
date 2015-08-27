@@ -22,7 +22,7 @@
 ## Imports ##
 #QT
 from PyQt4.QtCore import *;
-from PyQt4.QtGui import *;
+from PyQt4.QtGui  import *;
 #Project
 
 class GUI(object):

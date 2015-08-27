@@ -28,8 +28,10 @@ import json;
 import pygame;
 import pygame.locals;
 #Project
-from config import Config;
-from logger import Logger;
+from config              import Config;
+from logger              import Logger;
+from scenes.camera_scene import CameraScene;
+
 
 class SceneManager(object):
     ############################################################################
@@ -89,6 +91,14 @@ class SceneManager(object):
         self.__app_fps        = None;
         self.__app_running    = None;
 
+        #Scenes.
+        self.__scene_camera    = None;
+        self.__scene_postphoto = None;
+        self.__scene_filter    = None;
+        self.__scene_done      = None;
+
+        self.__scene_current   = None;
+
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
@@ -105,7 +115,7 @@ class SceneManager(object):
         self.__init_pygame();
 
         #Initialize the Scenes.
-
+        self.__init_scenes();
 
     def __init_pygame(self):
         pygame.init();
@@ -117,6 +127,9 @@ class SceneManager(object):
 
         self.__screen_surface = pygame.display.set_mode(self.get_window_size());
         self.__screen_surface.fill((0,0,0));
+
+    def __init_scenes(self):
+        self.__scene_camera = CameraScene();
 
 
     ############################################################################
@@ -142,6 +155,7 @@ class SceneManager(object):
         pass;
 
     def __draw(self):
+        self.__scene_camera.draw(self.__screen_surface);
         pygame.display.update();
 
     ############################################################################

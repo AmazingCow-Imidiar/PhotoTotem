@@ -52,7 +52,6 @@ class Config(object):
 
         return Config.__instance;
 
-
     ############################################################################
     ## CTOR                                                                   ##
     ############################################################################
@@ -131,5 +130,5 @@ class Config(object):
                 msg = "{} ({}) {} ({})".format("Configuration File",
                                                filename,
                                                "doesn't have required key",
-                                               "camera_config_filename");
+                                               key);
                 Logger.instance().log_fatal(msg);

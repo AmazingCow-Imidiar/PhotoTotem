@@ -150,6 +150,6 @@ class Camera(object):
                 msg = "{} ({}) {} ({})".format("Configuration File",
                                                filename,
                                                "doesn't have required key",
-                                               "camera_config_filename");
+                                               key);
                 Logger.instance().log_fatal(msg);
 

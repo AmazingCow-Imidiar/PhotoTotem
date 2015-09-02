@@ -28,9 +28,9 @@ import json;
 import pygame;
 import pygame.locals;
 #Project
-from config              import Config;
-from logger              import Logger;
-from scenes.camera_scene import CameraScene;
+from config       import Config;
+from logger       import Logger;
+from camera_scene import CameraScene;
 
 class SceneManager(object):
     ############################################################################
@@ -117,18 +117,28 @@ class SceneManager(object):
         self.__init_scenes();
 
     def __init_pygame(self):
+        #Init pygame.
         pygame.init();
 
+        #Set the app is not running yet (GAME LOOP).
         self.__app_running = False;
 
+        #Init the App clock.
         self.__app_clock = pygame.time.Clock();
         self.__app_fps   = float(60.0);
 
+        #Init the Window.
         self.__screen_surface = pygame.display.set_mode(self.get_window_size());
         self.__screen_surface.fill((0,0,0));
 
     def __init_scenes(self):
+        #Init the scenes.
         self.__scene_camera = CameraScene();
+        self.__scene_camera.init();
+
+        #COWTODO Init the other scenes...
+
+        self.__scene_current = self.__scene_camera;
 
 
     ############################################################################
@@ -138,26 +148,28 @@ class SceneManager(object):
         Logger.instance().log_debug("SceneManager.run");
 
         self.__app_running = True;
+        dt = self.__app_clock.tick(self.__app_fps);
         while(self.__app_running):
             self.__handle_events();
-            self.__update();
+            self.__update(dt);
             self.__draw();
 
-            self.__app_clock.tick(self.__app_fps);
+            dt = self.__app_clock.tick(self.__app_fps);
+
 
     def __handle_events(self):
         for event in pygame.event.get():
             if(event.type == pygame.locals.QUIT):
                 self.__app_running = False;
             else:
-                self.__scene_camera.handle_events(event);
+                self.__scene_current.handle_events(event);
 
-    def __update(self):
-        pass;
+    def __update(self, dt):
+        self.__scene_current.update(dt);
 
     def __draw(self):
         self.__screen_surface.fill((0,0,0));
-        self.__scene_camera.draw(self.__screen_surface);
+        self.__scene_current.draw(self.__screen_surface);
         pygame.display.update();
 
     ############################################################################

@@ -5,3 +5,4 @@ __all__ = ["camera",
            "scene_manager"];
 
 import logger;
+import scene_manager;

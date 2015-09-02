@@ -32,7 +32,6 @@ from config              import Config;
 from logger              import Logger;
 from scenes.camera_scene import CameraScene;
 
-
 class SceneManager(object):
     ############################################################################
     ## Constants                                                              ##

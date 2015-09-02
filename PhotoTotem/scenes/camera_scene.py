@@ -22,6 +22,7 @@
 ## Imports ##
 #Project
 from logger         import Logger;
+from scene_manager  import *;
 from base_scene     import BaseScene;
 from widgets.button import Button;
 from widgets.sprite import Sprite;
@@ -45,6 +46,7 @@ class CameraScene(BaseScene):
     ############################################################################
     def init(self):
         Logger.instance().log_debug("CameraScene.init");
+        SceneManager.instance().get_camera_scene_filename();
 
     ############################################################################
     ## Update / Draw / Handle Events Methods                                  ##
@@ -53,5 +55,6 @@ class CameraScene(BaseScene):
         pass;
     def draw(self, surface):
         self.button.draw(surface);
+
     def handle_events(self, event):
         pass;

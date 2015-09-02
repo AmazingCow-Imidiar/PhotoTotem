@@ -57,4 +57,4 @@ class CameraScene(BaseScene):
         self.button.draw(surface);
 
     def handle_events(self, event):
-        pass;
+        self.button.handle_events(event);

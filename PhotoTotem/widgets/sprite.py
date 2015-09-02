@@ -47,6 +47,9 @@ class Sprite(BaseWidget):
         self.x = x;
         self.y = y;
 
+    def get_bounding_box(self):
+        return self.__surface.get_bounding_rect();
+
     ############################################################################
     ## Update / Draw / Handle Events Methods                                  ##
     ############################################################################

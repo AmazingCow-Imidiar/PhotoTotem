@@ -149,6 +149,8 @@ class SceneManager(object):
         for event in pygame.event.get():
             if(event.type == pygame.locals.QUIT):
                 self.__app_running = False;
+            else:
+                self.__scene_camera.handle_events(event);
 
     def __update(self):
         pass;

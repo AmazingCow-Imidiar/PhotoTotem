@@ -19,8 +19,14 @@
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
 
+## Imports ##
+#Pygame
+import pygame;
+import pygame.locals;
+#Project
 from base_widget import BaseWidget;
 from sprite      import Sprite;
+
 
 class Button(BaseWidget):
     ############################################################################
@@ -68,7 +74,7 @@ class Button(BaseWidget):
     ## State Methods                                                          ##
     ############################################################################
     def reset(self):
-        self.__current_sprite = self.__normal_sprite;
+        self.__set_normal_state();
 
 
     ############################################################################
@@ -81,5 +87,25 @@ class Button(BaseWidget):
         self.__current_sprite.draw(surface);
 
     def handle_events(self, event):
-        #COWTODO: Handle the mouse.
+        if(event.type == pygame.locals.MOUSEBUTTONDOWN):
+            self.__onMouseButtonDown();
+        elif(event.type == pygame.locals.MOUSEBUTTONUP):
+            self.__onMouseButtonUp();
+        elif(event.type == pygame.locals.MOUSEMOTION):
+            self.__onMouseMotion();
+
+    def __onMouseButtonDown(self):
+        pos = pygame.mouse.get_pos();
+        print "on mouse down", pos, self.__current_sprite.get_bounding_box();
+        if(self.__current_sprite.get_bounding_box().collidepoint(pos)):
+            self.__set_pressed_state();
+
+    def __onMouseButtonUp(self):
+        self.reset();
+    def __onMouseMotion(self):
         pass;
+
+    def __set_pressed_state(self):
+        self.__current_sprite = self.__pressed_sprite;
+    def __set_normal_state(self):
+        self.__current_sprite = self.__normal_sprite;

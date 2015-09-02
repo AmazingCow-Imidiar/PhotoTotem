@@ -32,6 +32,12 @@ class BaseWidget(object):
         self.y = 0;
 
     ############################################################################
+    ## Abstract Methods                                                       ##
+    ############################################################################
+    def get_bounding_box(self):
+        assert "Override me";
+
+    ############################################################################
     ## Update / Draw / Handle Events Methods                                  ##
     ############################################################################
     def update(self, dt):
@@ -40,3 +46,4 @@ class BaseWidget(object):
         pass;
     def handle_events(self, event):
         pass;
+

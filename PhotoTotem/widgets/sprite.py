@@ -32,13 +32,17 @@ class Sprite(BaseWidget):
         print "Sprite.__init__";
 
         ## iVars ##
-        self.__surface = None;
+        self.__surface     = None;
+        self.__bouding_box = None;
 
     ############################################################################
     ## Set Image Methods                                                      ##
     ############################################################################
     def set_image_filename(self, filename):
         self.__surface = pygame.image.load(filename);
+        self.__bouding_box = pygame.Rect(0,0,
+                              self.__surface.get_width(),
+                              self.__surface.get_height());
 
     ############################################################################
     ## Position Methods                                                       ##
@@ -46,9 +50,11 @@ class Sprite(BaseWidget):
     def set_position(self, x, y):
         self.x = x;
         self.y = y;
+        self.__bouding_box[0] = x;
+        self.__bouding_box[1] = y;
 
     def get_bounding_box(self):
-        return self.__surface.get_bounding_rect();
+        return self.__bouding_box;
 
     ############################################################################
     ## Update / Draw / Handle Events Methods                                  ##

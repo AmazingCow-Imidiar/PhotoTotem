@@ -20,6 +20,9 @@
 ##----------------------------------------------------------------------------##
 
 ## Imports ##
+#Python
+import os;
+import json;
 #Project
 from logger     import Logger;
 from base_scene import BaseScene;
@@ -48,8 +51,13 @@ class CameraScene(BaseScene):
         BaseScene.__init__(self);
         #COWTODO: Remove it.
         print "CameraScene.__init__";
+
         ## iVars ##
         self.__config_filename = None;
+        self.__file_contents   = None;
+
+        self.__static_sprites    = None;
+        self.__take_photo_button = None;
 
     ############################################################################
     ## Init                                                                   ##
@@ -67,11 +75,34 @@ class CameraScene(BaseScene):
         self.__init_buttons();
 
     def __init_static_sprites(self):
-        pass;
+        self.__static_sprites = [];
+
+        l = self.__file_contents[CameraScene.__REQUIRED_KEY_STATIC_SPRITES];
+        for sprite_info in l:
+            pos = sprite_info["position"];
+            fn  = sprite_info["image"];
+
+            sprite = Sprite();
+            sprite.set_image_filename(fn);
+            sprite.set_position(pos[0], pos[1]);
+
+            self.__static_sprites.append(sprite);
+
     def __init_camera(self):
         pass;
+
     def __init_buttons(self):
-        pass;
+        self.__take_photo_button = Button();
+
+        button_info = self.__file_contents[CameraScene.__REQUIRED_KEY_TAKEPHOTO_BUTTON];
+
+        pos           = button_info["position"];
+        normal_image  = button_info["normal_image"];
+        pressed_image = button_info["pressed_image"];
+
+        self.__take_photo_button.set_sprite_filenames(normal_image, pressed_image);
+        self.__take_photo_button.set_position(pos[0], pos[1]);
+
 
     ############################################################################
     ## Update / Draw / Handle Events Methods                                  ##
@@ -80,10 +111,12 @@ class CameraScene(BaseScene):
         pass;
 
     def draw(self, surface):
-        pass;
+        for static_sprite in self.__static_sprites:
+            static_sprite.draw(surface);
+        self.__take_photo_button.draw(surface);
 
     def handle_events(self, event):
-        pass;
+        self.__take_photo_button.handle_events(event);
 
     ############################################################################
     ## Validation Methods                                                     ##
@@ -106,7 +139,7 @@ class CameraScene(BaseScene):
         #Check if is a valid json.
         try:
             self.__file_contents = json.load(open(filename));
-        except:
+        except Exception, e:
             msg = "{} ({}) {}.".format("CameraScene Configuration File",
                                        filename,
                                        "isn't a valid json file.");

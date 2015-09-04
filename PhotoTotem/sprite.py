@@ -53,8 +53,17 @@ class Sprite(BaseWidget):
         self.__bouding_box[0] = x;
         self.__bouding_box[1] = y;
 
+    def get_position(self):
+        return (self.x, self.y);
+
+    def get_size(self):
+        return (self.__bouding_box.width, self.__bouding_box.height);
+
     def get_bounding_box(self):
         return self.__bouding_box;
+
+    def set_visible(self, visible):
+        self.visible = visible;
 
     ############################################################################
     ## Update / Draw / Handle Events Methods                                  ##
@@ -63,7 +72,8 @@ class Sprite(BaseWidget):
         pass;
 
     def draw(self, surface):
-        surface.blit(self.__surface, (self.x, self.y));
+        if(self.visible):
+            surface.blit(self.__surface, (self.x, self.y));
 
     def handle_events(self, event):
         pass;

@@ -69,6 +69,8 @@ class Camera(object):
 
         self.__camera = None;
 
+        self.__last_photo = None;
+
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
@@ -109,19 +111,23 @@ class Camera(object):
     ## Camera Control                                                         ##
     ############################################################################
     def start(self):
-        #COWTODO: Implement
-        Logger.instance().log_fatal("Camera.start Not implemented yet");
-    def stop(self):
-        #COWTODO: Implement
-        Logger.instance().log_fatal("Camera.stop Not implemented yet");
+        self.__camera.start();
 
-    def get_frame(self):
-        #COWTODO: Implement
-        Logger.instance().log_fatal("Camera.get_frame Not implemented yet");
+    def stop(self):
+        self.__camera.stop();
+
+    def get_frame(self, scaleTo = None):
+        img = self.__camera.get_image();
+        if(scaleTo is None):
+            return img;
+        scaled_img = pygame.transform.scale(img, scaleTo);
+        return scaled_img;
 
     def take_photo(self):
-        #COWTODO: Implement
-        Logger.instance().log_fatal("Camera.take_photo Not implemented yet");
+        self.__last_photo = self.get_image();
+
+    def get_last_photo(self):
+        return self.__last_photo;
 
     ############################################################################
     ## Validation Methods                                                     ##

@@ -63,6 +63,9 @@ class SceneManager(object):
         __REQUIRED_KEY_SCENE_DONE_ENABLED,
     ];
 
+    __ONE_SECOND_IN_MS = 1000;
+    __APP_FPS          = float(60.0)
+
     ############################################################################
     ## Singleton                                                              ##
     ############################################################################
@@ -98,6 +101,10 @@ class SceneManager(object):
 
         self.__scene_current   = None;
 
+        #FPS
+        self.__current_fps_time          = None;
+        self.__fps_count                 = None;
+
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
@@ -125,7 +132,7 @@ class SceneManager(object):
 
         #Init the App clock.
         self.__app_clock = pygame.time.Clock();
-        self.__app_fps   = float(60.0);
+        self.__app_fps   = SceneManager.__APP_FPS;
 
         #Init the Window.
         self.__screen_surface = pygame.display.set_mode(self.get_window_size());
@@ -147,14 +154,30 @@ class SceneManager(object):
     def run(self):
         Logger.instance().log_debug("SceneManager.run");
 
+        #Set the app to running and start the clock.
         self.__app_running = True;
         dt = self.__app_clock.tick(self.__app_fps);
+
+        #Start the FPS Counter.
+        self.__current_fps_time          = 0;
+        self.__fps_count                 = 0;
+
         while(self.__app_running):
+            #Events/Update/Draw.
             self.__handle_events();
             self.__update(dt);
             self.__draw();
 
+            #Update the timer and check fps.
             dt = self.__app_clock.tick(self.__app_fps);
+            self.__current_fps_time += dt;
+            self.__fps_count        += 1;
+
+            if(self.__current_fps_time >= SceneManager.__ONE_SECOND_IN_MS):
+                print "FPS:", self.__fps_count;
+
+                self.__current_fps_time -= SceneManager.__ONE_SECOND_IN_MS;
+                self.__fps_count         = 0;
 
 
     def __handle_events(self):

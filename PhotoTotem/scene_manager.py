@@ -159,8 +159,8 @@ class SceneManager(object):
         dt = self.__app_clock.tick(self.__app_fps);
 
         #Start the FPS Counter.
-        self.__current_fps_time          = 0;
-        self.__fps_count                 = 0;
+        self.__current_fps_time = 0;
+        self.__fps_count        = 0;
 
         while(self.__app_running):
             #Events/Update/Draw.

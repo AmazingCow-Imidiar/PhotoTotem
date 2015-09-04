@@ -28,13 +28,16 @@ class BaseWidget(object):
         print "BaseWidget.__init__";
 
         ## iVars ##
-        self.x = 0;
-        self.y = 0;
+        self.x       = 0;
+        self.y       = 0;
+        self.visible = True;
 
     ############################################################################
     ## Abstract Methods                                                       ##
     ############################################################################
     def get_bounding_box(self):
+        assert "Override me";
+    def set_visible(self, visible):
         assert "Override me";
 
     ############################################################################

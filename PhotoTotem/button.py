@@ -84,6 +84,10 @@ class Button(BaseWidget):
     def get_bounding_box(self):
         return self.__current_sprite.get_bounding_box();
 
+    def set_visible(self, visible):
+        self.visible = visible;
+        self.reset();
+
     ############################################################################
     ## Callback Methods                                                       ##
     ############################################################################
@@ -106,7 +110,8 @@ class Button(BaseWidget):
     ## Update / Draw / Handle Events Methods                                  ##
     ############################################################################
     def draw(self, surface):
-        self.__current_sprite.draw(surface);
+        if(self.visible):
+            self.__current_sprite.draw(surface);
 
     def handle_events(self, event):
         #Check which type of event and pass to handler.

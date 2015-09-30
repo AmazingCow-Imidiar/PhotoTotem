@@ -3,7 +3,7 @@
 ##                 █      █                                                   ##
 ##                 ████████                                                   ##
 ##               ██        ██                                                 ##
-##              ███  █  █  ███    button.py                                   ##
+##              ███  █  █  ███    base_scene.py                               ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
 ##             █              █   Copyright (c) 2015 AmazingCow               ##
@@ -18,28 +18,69 @@
 ##                                                                            ##
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
-
 ## Imports ##
 #Pygame
 import pygame;
-import pygame.locals;
-#Project
-from base_widget import BaseWidget;
-from sprite      import Sprite;
+from logger import Logger;
 
-class Button(BaseWidget):
+################################################################################
+## Sprite                                                                     ##
+################################################################################
+class Sprite(pygame.sprite.Sprite):
+    ############################################################################
+    ## CTOR                                                                   ##
+    ############################################################################
+    def __init__(self, surface = None):
+        pygame.sprite.Sprite.__init__(self);
+        self.rect = pygame.rect.Rect(0,0,0,0);
+        if(surface is not None):
+            self.update_image(surface);
+
+    ############################################################################
+    ## Image Methods                                                          ##
+    ############################################################################
+    def load_image(self, filename):
+        surface = pygame.image.load(filename);
+        self.update_image(surface);
+
+    def update_image(self, surface):
+        self.image   = surface;
+        self.rect[2] = self.image.get_width();
+        self.rect[3] = self.image.get_height();
+
+    ############################################################################
+    ## Positions Setter/Getters                                               ##
+    ############################################################################
+    def set_position(self, pos):
+        self.rect[0] = pos[0];
+        self.rect[1] = pos[1];
+    def get_position(self):
+        return self.rect[0], self.rect[1];
+
+    ############################################################################
+    ## Size Setter/Getters                                                    ##
+    ############################################################################
+    def get_size(self):
+        return self.rect[2], self.rect[3];
+    def get_size_w(self):
+        return self.rect[2];
+    def get_size_h(self):
+        return self.rect[3];
+
+
+
+class Button(Sprite):
     ############################################################################
     ## CTOR                                                                   ##
     ############################################################################
     def __init__(self):
-        BaseWidget.__init__(self);
+        Sprite.__init__(self);
         #COWTODO: Remove.
         print "Button.__init__";
 
-        ## iVars ##
-        self.__normal_sprite  = Sprite();
-        self.__pressed_sprite = Sprite();
-        self.__current_sprite = None;
+        ## iVars #
+        self.__normal_surface  = None;
+        self.__pressed_surface = None;
 
         self.__click_callback = None;
 
@@ -47,52 +88,19 @@ class Button(BaseWidget):
     ############################################################################
     ## Set Image Methods                                                      ##
     ############################################################################
-    def set_sprite_filenames(self, normal_filename, pressed_filename):
-        #Assign the image filenames for both sprites.
-        self.set_normal_sprite_filename(normal_filename);
-        self.set_pressed_sprite_filename(pressed_filename);
+    def load_images(self, normal_filename, pressed_filename):
+        self.__normal_surface  = pygame.image.load(normal_filename);
+        self.__pressed_surface = pygame.image.load(pressed_filename);
 
-    def set_normal_sprite_filename(self, normal_filename):
-        #Assign the image filename to normal state and reset
-        #the button to normal state.
-        self.__normal_sprite.set_image_filename(normal_filename);
         self.reset();
 
-    def set_pressed_sprite_filename(self, pressed_filename):
-        #Assign the image filename to pressed state and reset
-        #the button to normal state.
-        self.__pressed_sprite.set_image_filename(pressed_filename);
-        self.reset();
-
-    ############################################################################
-    ## Position Methods                                                       ##
-    ############################################################################
-    def set_position(self, x, y):
-        #Set button's position.
-        self.x = x;
-        self.y = y;
-
-        #Set the state sprite positions.
-        self.__normal_sprite.set_position(x, y);
-        self.__normal_sprite.set_position(x, y);
-        self.__pressed_sprite.set_position(x, y);
-        self.__pressed_sprite.set_position(x, y);
-
-        #Reset button state to normal state.
-        self.reset();
-
-    def get_bounding_box(self):
-        return self.__current_sprite.get_bounding_box();
-
-    def set_visible(self, visible):
-        self.visible = visible;
-        self.reset();
 
     ############################################################################
     ## Callback Methods                                                       ##
     ############################################################################
     def set_click_callback(self, callback):
         self.__click_callback = callback;
+
 
     ############################################################################
     ## State Methods                                                          ##
@@ -101,17 +109,11 @@ class Button(BaseWidget):
         self.__set_normal_state();
 
     def __set_pressed_state(self):
-        self.__current_sprite = self.__pressed_sprite;
+        self.update_image(self.__pressed_surface);
 
     def __set_normal_state(self):
-        self.__current_sprite = self.__normal_sprite;
+        self.update_image(self.__normal_surface);
 
-    ############################################################################
-    ## Update / Draw / Handle Events Methods                                  ##
-    ############################################################################
-    def draw(self, surface):
-        if(self.visible):
-            self.__current_sprite.draw(surface);
 
     def handle_events(self, event):
         #Check which type of event and pass to handler.
@@ -122,21 +124,21 @@ class Button(BaseWidget):
         elif(event.type == pygame.locals.MOUSEMOTION):
             self.__onMouseMotion();
 
+
     ############################################################################
     ## Mouse Events                                                           ##
     ############################################################################
     def __onMouseButtonDown(self):
         #COWTODO: Comment.
         pos = pygame.mouse.get_pos();
-        #COWTODO: Remove output.
-        print "on mouse down", pos, self.__current_sprite.get_bounding_box();
-        if(self.get_bounding_box().collidepoint(pos)):
+        if(self.rect.collidepoint(pos)):
             self.__set_pressed_state();
 
     def __onMouseButtonUp(self):
         #COWTODO: Comment.
         self.reset();
-        if(self.__click_callback is not None):
+        pos = pygame.mouse.get_pos();
+        if(self.rect.collidepoint(pos) and self.__click_callback is not None):
             self.__click_callback();
 
     def __onMouseMotion(self):

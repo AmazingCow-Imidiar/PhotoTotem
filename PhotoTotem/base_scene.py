@@ -18,29 +18,23 @@
 ##                                                                            ##
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
-
+## Imports ##
+#Pygame
+import pygame;
 from logger import Logger;
 
-class BaseScene(object):
-    ############################################################################
-    ## CTOR                                                                   ##
-    ############################################################################
+################################################################################
+## Scene                                                                      ##
+################################################################################
+class BaseScene(pygame.sprite.LayeredUpdates):
     def __init__(self):
-        #COWTODO: Remove it.
-        print "BaseScene.__init__";
+        pygame.sprite.LayeredUpdates.__init__(self);
 
-    ############################################################################
-    ## Init                                                                   ##
-    ############################################################################
-    def init(self):
-        Logger.instance().log_debug("BaseScene.init");
+    def start(self):
+        assert "override me";
+    def end(self):
+        assert "override me";
 
-    ############################################################################
-    ## Update / Draw / Handle Events Methods                                  ##
-    ############################################################################
-    def update(self, dt):
-        pass;
-    def draw(self, surface):
-        pass;
     def handle_events(self, event):
         pass;
+

@@ -31,6 +31,10 @@ import pygame.locals;
 from config       import Config;
 from logger       import Logger;
 from camera_scene import CameraScene;
+from postphoto_scene import PostPhotoScene;
+from done_scene import DoneScene;
+
+import config_validation;
 
 class SceneManager(object):
     ############################################################################
@@ -66,6 +70,7 @@ class SceneManager(object):
     __ONE_SECOND_IN_MS = 1000;
     __APP_FPS          = float(60.0)
 
+
     ############################################################################
     ## Singleton                                                              ##
     ############################################################################
@@ -75,6 +80,7 @@ class SceneManager(object):
         if(SceneManager.__instance is None):
             SceneManager.__instance = SceneManager();
         return SceneManager.__instance;
+
 
     ############################################################################
     ## CTOR                                                                   ##
@@ -102,8 +108,9 @@ class SceneManager(object):
         self.__scene_current   = None;
 
         #FPS
-        self.__current_fps_time          = None;
-        self.__fps_count                 = None;
+        self.__current_fps_time = None;
+        self.__fps_count        = None;
+
 
     ############################################################################
     ## Init                                                                   ##
@@ -115,13 +122,14 @@ class SceneManager(object):
         self.__config_filename = Config.instance().get_scene_manager_config_filename();
 
         #Validate the configuration.
-        self.__validate_config_file();
-
+        self.__file_contents = config_validation.validate("SceneManager",
+                                                          self.__config_filename,
+                                                          SceneManager.__REQUIRED_KEYS);
         #Initialize the Pygame.
         self.__init_pygame();
 
         #Initialize the Scenes.
-        self.__init_scenes();
+        self.__change_scene(self.__get_scene_camera_instance());
 
     def __init_pygame(self):
         #Init pygame.
@@ -138,15 +146,6 @@ class SceneManager(object):
         self.__screen_surface = pygame.display.set_mode(self.get_window_size());
         self.__screen_surface.fill((0,0,0));
 
-    def __init_scenes(self):
-        #Init the scenes.
-        self.__scene_camera = CameraScene();
-        self.__scene_camera.init();
-
-        #COWTODO Init the other scenes...
-
-        self.__scene_current = self.__scene_camera;
-
 
     ############################################################################
     ## Run                                                                    ##
@@ -162,6 +161,7 @@ class SceneManager(object):
         self.__current_fps_time = 0;
         self.__fps_count        = 0;
 
+        #Game loop.
         while(self.__app_running):
             #Events/Update/Draw.
             self.__handle_events();
@@ -195,12 +195,39 @@ class SceneManager(object):
         self.__scene_current.draw(self.__screen_surface);
         pygame.display.update();
 
+
     ############################################################################
     ## Quit                                                                   ##
     ############################################################################
     def quit(self):
         Logger.instance().log_debug("SceneManager.quit");
         pygame.quit();
+
+
+    ############################################################################
+    ## Scenes Management                                                      ##
+    ############################################################################
+    def scene_camera_complete(self):
+        self.__change_scene(self.__get_scene_postphoto_instance());
+
+    def scene_postphoto_complete(self, go_back):
+        #If go_back is true, means that user
+        #didn't accepted the taken photo.
+        if(go_back):
+            self.__change_scene(self.__get_scene_camera_instance());
+        else:
+            self.__change_scene(self.__get_scene_done_instance());
+
+    def scene_done_complete(self):
+        self.__change_scene(self.__get_scene_camera_instance());
+
+    def __change_scene(self, scene):
+        #At first time __scene_current is None.
+        if(self.__scene_current is not None):
+            self.__scene_current.end();
+
+        self.__scene_current = scene;
+        self.__scene_current.start();
 
 
     ############################################################################
@@ -228,40 +255,31 @@ class SceneManager(object):
     def get_done_scene_enabled(self):
         return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_DONE_ENABLED];
 
-    ############################################################################
-    ## Validation Methods                                                     ##
-    ############################################################################
-    def __validate_config_file(self):
-        Logger.instance().log_debug("SceneManager.validate_config_file");
-
-        #Just to ease the typing.
-        filename = self.__config_filename;
-
-        #Check if filename is valid.
-        #Empty.
-        if(len(filename) == 0):
-            Logger.instance().log_fatal("SceneManager Configuration Filename is empty.");
-        #Not a valid file path.
-        if(not os.path.isfile(filename)):
-            msg = "SceneManager Configuration Filename ({}) is invalid.".format(filename);
-            Logger.instance().log_fatal(msg);
-
-        #Check if is a valid json.
-        try:
-            self.__file_contents = json.load(open(filename));
-        except:
-            msg = "{} ({}) {}.".format("SceneManager Configuration File",
-                                       filename,
-                                       "isn't a valid json file.");
-            Logger.instance().log_fatal(msg);
 
 
-        #Check if file has the required keys.
-        for key in SceneManager.__REQUIRED_KEYS:
-            if(key not in self.__file_contents):
-                msg = "{} ({}) {} ({})".format("Configuration File",
-                                               filename,
-                                               "doesn't have required key",
-                                               key);
-                Logger.instance().log_fatal(msg);
+    def __get_scene_camera_instance(self):
+        if(self.__scene_camera is None):
+            self.__scene_camera = CameraScene();
+            self.__scene_camera.init();
+        return self.__scene_camera;
+
+    def __get_scene_postphoto_instance(self):
+        if(self.__scene_postphoto is None):
+            self.__scene_postphoto = PostPhotoScene();
+            self.__scene_postphoto.init();
+        return self.__scene_postphoto;
+
+    def __get_scene_done_instance(self):
+        if(self.__scene_done is None):
+            self.__scene_done = DoneScene();
+            self.__scene_done.init();
+        return self.__scene_done;
+
+    def __get_scene_filter_instance(self):
+        if(self.__scene_postphoto is None):
+            self.__scene_postphoto = PostPhotoScene();
+            self.__scene_postphoto.init();
+        return self.__scene_camera;
+
+
 

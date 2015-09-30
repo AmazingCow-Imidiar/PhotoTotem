@@ -30,11 +30,16 @@ import pygame.camera;
 #Project
 from config import Config;
 from logger import Logger;
+import config_validation;
+
+#COWTODO: REMOVe
+import time;
 
 class Camera(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
+    #Required Keys.
     __REQUIRED_KEY_RESOLUTION = "camera_resolution";
     __REQUIRED_KEY_DEVICE     = "camera_device";
 
@@ -52,6 +57,7 @@ class Camera(object):
         if(Camera.__instance is None):
             Camera.__instance = Camera();
         return Camera.__instance;
+
 
     ############################################################################
     ## CTOR                                                                   ##
@@ -71,6 +77,8 @@ class Camera(object):
 
         self.__last_photo = None;
 
+        self._font = None;
+
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
@@ -81,7 +89,9 @@ class Camera(object):
         self.__config_filename = Config.instance().get_camera_config_filename();
 
         #Validate the configuration.
-        self.__validate_config_file();
+        self.__file_contents = config_validation.validate("Camera",
+                                                          self.__config_filename,
+                                                          Camera.__REQUIRED_KEYS);
 
         #Set the values.
         self.__resolution = self.__file_contents[Camera.__REQUIRED_KEY_RESOLUTION];
@@ -92,13 +102,19 @@ class Camera(object):
     def __init_camera_device(self):
         Logger.instance().log_debug("Camera.init_camera_device");
 
+        #COWTODO: Uncomment.
         #Initialize pygame.
-        pygame.init();
-        pygame.camera.init();
+        try:
+            pygame.init();
+            self._font = pygame.font.Font("./imgs/SourceCodePro-Regular.ttf", 50);
+        #     pygame.camera.init();
+        except Exception, e:
+            Logger.instance().log_fatal("Camera - {}".format(e));
 
-        #Initialize the camera.
-        self.__camera = pygame.camera.Camera(self.__device, self.__resolution);
-        self.__camera.start();
+        # #Initialize the camera.
+        # self.__camera = pygame.camera.Camera(self.__device, self.__resolution);
+        # self.__camera.start();
+
 
     ############################################################################
     ## Quit                                                                   ##
@@ -106,6 +122,7 @@ class Camera(object):
     def quit(self):
         Logger.instance().log_debug("Camera.quit");
         pygame.quit();
+
 
     ############################################################################
     ## Camera Control                                                         ##
@@ -116,53 +133,27 @@ class Camera(object):
     def stop(self):
         self.__camera.stop();
 
-    def get_frame(self, scaleTo = None):
-        img = self.__camera.get_image();
-        if(scaleTo is None):
-            return img;
-        scaled_img = pygame.transform.scale(img, scaleTo);
-        return scaled_img;
+    def get_frame(self, scale_to = None):
+        #COWTODO: Uncomment.
+        # img = self.__camera.get_image();
+
+        #COWTODO: Only for dev on OSX.
+        surface = self._font.render(str(time.clock()), True, (0, 0,  0), (255, 0,255));
+        img = pygame.image.load("./imgs/ingrid.jpg");
+        img.blit(surface, (10, 10));
+
+        return self.__scale_img(img, scale_to);
+
 
     def take_photo(self):
-        self.__last_photo = self.get_image();
+        self.__last_photo = self.get_frame();
 
-    def get_last_photo(self):
-        return self.__last_photo;
+    def get_last_photo(self, scale_to = None):
+        return self.__scale_img(self.__last_photo, scale_to);
 
-    ############################################################################
-    ## Validation Methods                                                     ##
-    ############################################################################
-    def __validate_config_file(self):
-        Logger.instance().log_debug("Camera.validate_config_file");
+    def __scale_img(self, original, scale_to):
+        if(scale_to is None):
+            return original;
 
-        #Just to ease the typing.
-        filename = self.__config_filename;
-
-        #Check if filename is valid.
-        #Empty.
-        if(len(filename) == 0):
-            Logger.instance().log_fatal("Camera Configuration Filename is empty.");
-        #Not a valid file path.
-        if(not os.path.isfile(filename)):
-            msg = "Camera Configuration Filename ({}) is invalid.".format(filename);
-            Logger.instance().log_fatal(msg);
-
-        #Check if is a valid json.
-        try:
-            self.__file_contents = json.load(open(filename));
-        except:
-            msg = "{} ({}) {}.".format("Camera Configuration File",
-                                       filename,
-                                       "isn't a valid json file.");
-            Logger.instance().log_fatal(msg);
-
-
-        #Check if file has the required keys.
-        for key in Camera.__REQUIRED_KEYS:
-            if(key not in self.__file_contents):
-                msg = "{} ({}) {} ({})".format("Configuration File",
-                                               filename,
-                                               "doesn't have required key",
-                                               key);
-                Logger.instance().log_fatal(msg);
-
+        scaled_img = pygame.transform.scale(original, scale_to);
+        return scaled_img;

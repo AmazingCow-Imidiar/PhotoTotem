@@ -22,20 +22,21 @@
 #Python
 import getopt;
 import sys;
-import os.path;
-import json;
 #Project
 from gui    import GUI;
 from logger import Logger;
+import config_validation;
 
 class Config(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
+    #Flags.
     __FLAG_CONFIG     = "config";
     __ALL_FLAGS_SHORT = "";
     __ALL_FLAGS_LONG  = [__FLAG_CONFIG+"="];
 
+    #Required keys.
     __REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
     __REQUIRED_KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
 
@@ -43,6 +44,7 @@ class Config(object):
         __REQUIRED_KEY_CAMERA_FILENAME,
         __REQUIRED_KEY_SCENEMANAGER_FILENAME,
     ];
+
 
     ############################################################################
     ## Singleton                                                              ##
@@ -55,6 +57,7 @@ class Config(object):
 
         return Config.__instance;
 
+
     ############################################################################
     ## CTOR                                                                   ##
     ############################################################################
@@ -65,6 +68,7 @@ class Config(object):
         ## iVars ##
         self.__config_filename = None;
         self.__file_contents   = None;
+
 
     ############################################################################
     ## Init Method                                                            ##
@@ -90,7 +94,9 @@ class Config(object):
                 self.__config_filename = value;
 
         #Check if file is valid.
-        self.__validate_config_file();
+        self.__file_contents = config_validation.validate("Config",
+                                                          self.__config_filename,
+                                                          Config.__REQUIRED_KEYS);
 
 
     ############################################################################
@@ -98,42 +104,9 @@ class Config(object):
     ############################################################################
     def get_camera_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
+
     def get_scene_manager_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_SCENEMANAGER_FILENAME];
 
-    ############################################################################
-    ## Validation Methods                                                     ##
-    ############################################################################
-    def __validate_config_file(self):
-        Logger.instance().log_debug("Config.validate_config_file");
-
-        #Just to ease the typing.
-        filename = self.__config_filename;
-
-        #Check if filename is valid.
-        #Empty.
-        if(len(filename) == 0):
-            Logger.instance().log_fatal("Configuration Filename is empty.");
-        #Not a valid file path.
-        if(not os.path.isfile(filename)):
-            msg = "Configuration Filename ({}) is invalid.".format(filename);
-            Logger.instance().log_fatal(msg);
-
-        #Check if is a valid json.
-        try:
-            self.__file_contents = json.load(open(filename));
-        except:
-            msg = "{} ({}) {}.".format("Configuration File",
-                                       filename,
-                                       "isn't a valid json file.");
-            Logger.instance().log_fatal(msg);
 
 
-        #Check if file has the required keys.
-        for key in Config.__REQUIRED_KEYS:
-            if(key not in self.__file_contents):
-                msg = "{} ({}) {} ({})".format("Configuration File",
-                                               filename,
-                                               "doesn't have required key",
-                                               key);
-                Logger.instance().log_fatal(msg);

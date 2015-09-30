@@ -1,5 +1,3 @@
+#We dont' want python byte codes neither the runtime logs...
 *.pyc
 LOG/
-imgs/
-config/
-OLD/

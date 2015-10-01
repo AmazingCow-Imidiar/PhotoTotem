@@ -80,6 +80,11 @@ def copy_all_stuff():
     #Copy the src folder to output folder.
     os.system("cp -r {} {}".format("src", full_output_path));
 
+    #Remove the Dev Makefile from the copied src folder.
+    os.system("rm {}".format(os.path.join(full_output_path, "src", "Makefile")));
+    #Remove all the .pyc files from the copied src folder.
+    os.system("rm {}".format(os.path.join(full_output_path, "src", "*.pyc")));
+
 ################################################################################
 ## Version Load/Save/Helpers Functions                                        ##
 ################################################################################

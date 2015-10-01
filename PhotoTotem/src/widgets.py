@@ -21,6 +21,7 @@
 ## Imports ##
 #Pygame
 import pygame;
+#Project.
 from logger import Logger;
 
 ################################################################################
@@ -54,6 +55,7 @@ class Sprite(pygame.sprite.Sprite):
     def set_position(self, pos):
         self.rect[0] = pos[0];
         self.rect[1] = pos[1];
+
     def get_position(self):
         return self.rect[0], self.rect[1];
 
@@ -62,10 +64,6 @@ class Sprite(pygame.sprite.Sprite):
     ############################################################################
     def get_size(self):
         return self.rect[2], self.rect[3];
-    def get_size_w(self):
-        return self.rect[2];
-    def get_size_h(self):
-        return self.rect[3];
 
 
 
@@ -129,19 +127,23 @@ class Button(Sprite):
     ## Mouse Events                                                           ##
     ############################################################################
     def __onMouseButtonDown(self):
-        #COWTODO: Comment.
+        #User touch the screen, check if the touch point
+        #is inside of the Button bounding box and set
+        #the state to pressed if is.
         pos = pygame.mouse.get_pos();
         if(self.rect.collidepoint(pos)):
             self.__set_pressed_state();
 
     def __onMouseButtonUp(self):
-        #COWTODO: Comment.
+        #Button untouch the screen, set the state to normal
+        #and check if the touch point was inside the button
+        #bouding box. If was set that button was pressed.
         self.reset();
+
         pos = pygame.mouse.get_pos();
         if(self.rect.collidepoint(pos) and self.__click_callback is not None):
             self.__click_callback();
 
     def __onMouseMotion(self):
-        #COWTODO: Comment.
         #COWTODO: Implement.
         pass;

@@ -28,13 +28,15 @@ import json;
 import pygame;
 import pygame.locals;
 #Project
-from config       import Config;
-from logger       import Logger;
-from camera_scene import CameraScene;
-from postphoto_scene import PostPhotoScene;
-from done_scene import DoneScene;
-
 import config_validation;
+from   config          import Config;
+from   logger          import Logger;
+from   clock           import BasicClock;
+from   camera_scene    import CameraScene;
+from   postphoto_scene import PostPhotoScene;
+from   done_scene      import DoneScene;
+
+
 
 class SceneManager(object):
     ############################################################################
@@ -49,26 +51,17 @@ class SceneManager(object):
     __REQUIRED_KEY_SCENE_FILTER_FILENAME    = "scene_filter_filename";
     __REQUIRED_KEY_SCENE_DONE_FILENAME      = "scene_done_filename";
 
-    #Scenes Enabled.
-    __REQUIRED_KEY_SCENE_POSTPHOTO_ENABLED = "scene_postphoto_enabled";
-    __REQUIRED_KEY_SCENE_FILTER_ENABLED    = "scene_filter_enabled";
-    __REQUIRED_KEY_SCENE_DONE_ENABLED      = "scene_done_enabled";
-
     __REQUIRED_KEYS = [
         __REQUIRED_KEY_WINDOW_SIZE,
 
         __REQUIRED_KEY_SCENE_CAMERA_FILENAME,
         __REQUIRED_KEY_SCENE_POSTPHOTO_FILENAME,
         __REQUIRED_KEY_SCENE_FILTER_FILENAME,
-        __REQUIRED_KEY_SCENE_DONE_FILENAME,
-
-        __REQUIRED_KEY_SCENE_POSTPHOTO_ENABLED,
-        __REQUIRED_KEY_SCENE_FILTER_ENABLED,
-        __REQUIRED_KEY_SCENE_DONE_ENABLED,
+        __REQUIRED_KEY_SCENE_DONE_FILENAME
     ];
 
-    __ONE_SECOND_IN_MS = 1000;
-    __APP_FPS          = float(60.0)
+    #The frame rate of application.
+    __APP_FPS = float(60.0)
 
 
     ############################################################################
@@ -108,8 +101,8 @@ class SceneManager(object):
         self.__scene_current   = None;
 
         #FPS
-        self.__current_fps_time = None;
-        self.__fps_count        = None;
+        self.__fps_timer = None;
+        self.__fps_count = None;
 
 
     ############################################################################
@@ -158,8 +151,9 @@ class SceneManager(object):
         dt = self.__app_clock.tick(self.__app_fps);
 
         #Start the FPS Counter.
-        self.__current_fps_time = 0;
-        self.__fps_count        = 0;
+        self.__fps_timer = BasicClock(1000, self.__on_fps_timer_tick);
+        self.__fps_timer.start();
+        self.__fps_count = 0;
 
         #Game loop.
         while(self.__app_running):
@@ -170,14 +164,9 @@ class SceneManager(object):
 
             #Update the timer and check fps.
             dt = self.__app_clock.tick(self.__app_fps);
-            self.__current_fps_time += dt;
-            self.__fps_count        += 1;
 
-            if(self.__current_fps_time >= SceneManager.__ONE_SECOND_IN_MS):
-                print "FPS:", self.__fps_count;
-
-                self.__current_fps_time -= SceneManager.__ONE_SECOND_IN_MS;
-                self.__fps_count         = 0;
+            self.__fps_timer.update(dt);
+            self.__fps_count += 1;
 
 
     def __handle_events(self):
@@ -187,13 +176,23 @@ class SceneManager(object):
             else:
                 self.__scene_current.handle_events(event);
 
+
     def __update(self, dt):
         self.__scene_current.update(dt);
+
 
     def __draw(self):
         self.__screen_surface.fill((0,0,0));
         self.__scene_current.draw(self.__screen_surface);
         pygame.display.update();
+
+
+    ############################################################################
+    ## FPS Timer Callback                                                     ##
+    ############################################################################
+    def __on_fps_timer_tick(self):
+        print "FPS:", self.__fps_count;
+        self.__fps_count = 0;
 
 
     ############################################################################
@@ -247,16 +246,10 @@ class SceneManager(object):
     def get_done_scene_filename(self):
         return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_DONE_FILENAME];
 
-    #Scenes Enabled.
-    def get_postphoto_scene_enabled(self):
-        return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_POSTPHOTO_ENABLED];
-    def get_filter_scene_enabled(self):
-        return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_FILTER_ENABLED];
-    def get_done_scene_enabled(self):
-        return self.__file_contents[SceneManager.__REQUIRED_KEY_SCENE_DONE_ENABLED];
 
-
-
+    ############################################################################
+    ## Scenes instances getters                                               ##
+    ############################################################################
     def __get_scene_camera_instance(self):
         if(self.__scene_camera is None):
             self.__scene_camera = CameraScene();

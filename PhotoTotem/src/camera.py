@@ -24,16 +24,15 @@
 import os;
 import os.path;
 import json;
+import time;
 #Pygame
 import pygame;
 import pygame.camera;
 #Project
-from config import Config;
-from logger import Logger;
 import config_validation;
-
-#COWTODO: REMOVe
-import time;
+import filesystem;
+from   config import Config;
+from   logger import Logger;
 
 class Camera(object):
     ############################################################################
@@ -67,17 +66,19 @@ class Camera(object):
         print "Camera.__init__";
 
         ## iVars ##
+        #Configuration stuff.
         self.__config_filename = None;
         self.__file_contents   = None;
-
+        #Camera stuff.
         self.__resolution = None;
         self.__device     = None;
-
-        self.__camera = None;
-
+        self.__camera     = None;
+        #Photos.
         self.__last_photo = None;
+        #Dummy Camera.
+        self.__dummy_camera_font  = None;
+        self.__dummy_camera_image = None;
 
-        self._font = None;
 
     ############################################################################
     ## Init                                                                   ##
@@ -102,18 +103,30 @@ class Camera(object):
     def __init_camera_device(self):
         Logger.instance().log_debug("Camera.init_camera_device");
 
-        #COWTODO: Uncomment.
         #Initialize pygame.
         try:
+            #Pygame is initialized always.
             pygame.init();
-            self._font = pygame.font.Font("./imgs/SourceCodePro-Regular.ttf", 50);
-        #     pygame.camera.init();
+
+            #If we are using the dummy camera, init the it's font and image.
+            if(Config.instance().get_dummy_camera()):
+                #Font.
+                font_path = filesystem.canonical_path("./private_resources/dummy_camera_font.ttf");
+                self.__dummy_camera_font = pygame.font.Font(font_path, 50);
+                #Image.
+                image_path = filesystem.canonical_path("./private_resources/dummy_camera_image.png");
+                self.__dummy_camera_image = pygame.image.load(image_path);
+            #Otherwise initialize the real camera.
+            else:
+                pygame.camera.init();
+                # #Initialize the camera.
+                self.__camera = pygame.camera.Camera(self.__device,
+                                                     self.__resolution);
+                self.__camera.start();
+
+        #All errors here are fatal.
         except Exception, e:
             Logger.instance().log_fatal("Camera - {}".format(e));
-
-        # #Initialize the camera.
-        # self.__camera = pygame.camera.Camera(self.__device, self.__resolution);
-        # self.__camera.start();
 
 
     ############################################################################
@@ -128,24 +141,40 @@ class Camera(object):
     ## Camera Control                                                         ##
     ############################################################################
     def start(self):
-        self.__camera.start();
+        Logger.instance().log_debug("Camera.start");
+        if(not Config.instance().get_dummy_camera()):
+            self.__camera.start();
 
     def stop(self):
-        self.__camera.stop();
+        Logger.instance().log_debug("Camera.stop");
+        if(not Config.instance().get_dummy_camera()):
+            self.__camera.stop();
 
     def get_frame(self, scale_to = None):
-        #COWTODO: Uncomment.
-        # img = self.__camera.get_image();
+        img = None;
 
-        #COWTODO: Only for dev on OSX.
-        surface = self._font.render(str(time.clock()), True, (0, 0,  0), (255, 0,255));
-        img = pygame.image.load("./imgs/ingrid.jpg");
-        img.blit(surface, (10, 10));
+        #When using a dummy camera, get the current time and blit it
+        #onto the dummy_image - The result is a generation of the "new"
+        #image with the current time.
+        if(Config.instance().get_dummy_camera()):
+            time_label = str(time.time());
+            font_surface = self.__dummy_camera_font.render(time_label,
+                                                           True,
+                                                           (0, 0,  0),    #Black
+                                                           (255, 0,255)); #Magenta
+            img = self.__dummy_camera_image.copy();
+            img.blit(font_surface, (10, 10));
+
+        #When not using the dummy camera, just grab the current camera frame.
+        else:
+            img = self.__camera.get_image();
+
 
         return self.__scale_img(img, scale_to);
 
 
     def take_photo(self):
+        Logger.instance().log_debug("Camera.take_photo");
         self.__last_photo = self.get_frame();
 
     def get_last_photo(self, scale_to = None):

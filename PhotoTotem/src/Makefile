@@ -1,6 +1,6 @@
 
 build: clear_log
-	python main.py --config=./config/config.json;
+	python main.py --config=../config/config.json --dummy-camera;
 	find . -name "*.pyc" -delete;
 
 clear_log:

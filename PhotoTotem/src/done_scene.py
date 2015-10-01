@@ -24,14 +24,15 @@
 import os;
 import json;
 #Project
-from logger     import Logger;
-from camera     import Camera;
-from base_scene import BaseScene;
-from widgets    import Sprite;
-from widgets    import Button;
-from clock      import BasicClock;
 import config_validation;
 import scene_manager;
+from   logger     import Logger;
+from   camera     import Camera;
+from   base_scene import BaseScene;
+from   widgets    import Sprite;
+from   widgets    import Button;
+from   clock      import BasicClock;
+
 
 class DoneScene(BaseScene):
     ############################################################################
@@ -44,10 +45,12 @@ class DoneScene(BaseScene):
         __REQUIRED_KEY_STATIC_SPRITES,
     ];
 
-    #COWTODO: COMMENT.
+    #Layers.
     __LAYER_INDEX_STATIC_SPRITE = 1;
 
+    #How much time the scene will stay active (in ms).
     __SCENE_TIMER_TIME = 1000;
+
 
     ############################################################################
     ## CTOR                                                                   ##
@@ -67,21 +70,25 @@ class DoneScene(BaseScene):
         self.__scene_timer = BasicClock(DoneScene.__SCENE_TIMER_TIME,
                                         self.__on_scene_timer_tick);
 
+
     ############################################################################
     ## Overriden Methods                                                      ##
     ############################################################################
     def start(self):
         Logger.instance().log_debug("DoneScene.start");
+        #Start the timer just as the scene became active.
         self.__scene_timer.start();
 
     def end(self):
         Logger.instance().log_debug("DoneScene.end");
+
 
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
     def init(self):
         Logger.instance().log_debug("DoneScene.init");
+
         self.__config_filename = scene_manager.SceneManager.instance().get_done_scene_filename();
 
         #Validate the configuration.
@@ -90,6 +97,7 @@ class DoneScene(BaseScene):
                                                           DoneScene.__REQUIRED_KEYS);
         #Init the UI.
         self.__init_static_sprites();
+
 
     def __init_static_sprites(self):
         sprite_list = self.__file_contents[DoneScene.__REQUIRED_KEY_STATIC_SPRITES];
@@ -110,6 +118,7 @@ class DoneScene(BaseScene):
     ############################################################################
     def update(self, dt):
         self.__scene_timer.update(dt);
+
 
     ############################################################################
     ## Timer Callbacks                                                        ##

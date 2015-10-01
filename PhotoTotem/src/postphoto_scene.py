@@ -32,6 +32,7 @@ from widgets    import Button;
 from clock      import BasicClock;
 import scene_manager; #Not from ... import to avoid circular imports.
 import config_validation;
+import filesystem;
 
 class PostPhotoScene(BaseScene):
     ############################################################################
@@ -182,6 +183,7 @@ class PostPhotoScene(BaseScene):
     ############################################################################
     def __on_accept_button_pressed(self):
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=False);
+        filesystem.save_photo(Camera.instance().get_last_photo(), None);
 
     def __on_reject_button_pressed(self):
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=True);

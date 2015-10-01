@@ -19,27 +19,51 @@
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
 
+## Imports ##
+#Python
 import os;
 import os.path;
 import time;
-
+from multiprocessing import Process;
+#Pygame
 import pygame;
+#Project
+import config;
+import logger;
 
-from config import Config;
-from camera import Camera;
-
+################################################################################
+## ???                                                                        ##
+################################################################################
 def canonical_path(*args):
     return os.path.abspath(os.path.expanduser(os.path.join(*args)));
 
-def save_photo(original_photo, frame_photo, use_another_thread = False):
-    out_path = Config.instance().get_image_output_path();
-    merge    = Config.instance().get_runtime_merge();
 
+def save_photo(image_to_save, use_another_thread = True):
+    logger.Logger.instance().log_debug("Filesystem.save_photo");
+
+    #Get the path that photo will be saved.
+    out_path = config.Config.instance().get_image_output_path();
+
+    #Canonize the the path...
     dir_path   = canonical_path(out_path);
     image_name = time.asctime().replace(" ", "_").replace(":", "_") + ".png";
     fullpath   = canonical_path(dir_path, image_name);
 
+    #Create the diretory if it doesn't exists already.
     if(not os.path.isdir(dir_path)):
         os.system("mkdir -p {}".format(dir_path));
 
-    pygame.image.save(original_photo, fullpath);
+    #Two of save... Fist one is in the main thread, blocking the UI.
+    #The another one is saving in background...
+    if(use_another_thread):
+        p = Process(target = __save,
+                    args   = (image_to_save, fullpath));
+        p.start();
+    else:
+        __save(image_to_save, fullpath);
+
+################################################################################
+## Helper Methods                                                             ##
+################################################################################
+def __save(img, fullpath):
+    pygame.image.save(img, fullpath);

@@ -23,18 +23,24 @@
 import getopt;
 import sys;
 #Project
-from gui    import GUI;
-from logger import Logger;
 import config_validation;
+from   gui    import GUI;
+from   logger import Logger;
+
 
 class Config(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
     #Flags.
-    __FLAG_CONFIG     = "config";
+    __FLAG_CONFIG       = "config";
+    __FLAG_DUMMY_CAMERA = "dummy-camera"
+
     __ALL_FLAGS_SHORT = "";
-    __ALL_FLAGS_LONG  = [__FLAG_CONFIG+"="];
+    __ALL_FLAGS_LONG  = [
+        __FLAG_CONFIG + "=",
+        __FLAG_DUMMY_CAMERA
+    ];
 
     #Required keys.
     __REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
@@ -72,6 +78,7 @@ class Config(object):
         ## iVars ##
         self.__config_filename = None;
         self.__file_contents   = None;
+        self.__dummy_camera    = False;
 
 
     ############################################################################
@@ -96,6 +103,9 @@ class Config(object):
             #Configuration filename.
             if(key in Config.__FLAG_CONFIG):
                 self.__config_filename = value;
+            #Use dummy camera.
+            elif(key in Config.__FLAG_DUMMY_CAMERA):
+                self.__dummy_camera = True;
 
         #Check if file is valid.
         self.__file_contents = config_validation.validate("Config",
@@ -108,6 +118,9 @@ class Config(object):
     ############################################################################
     def get_camera_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
+
+    def get_dummy_camera(self):
+        return self.__dummy_camera;
 
     def get_scene_manager_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_SCENEMANAGER_FILENAME];

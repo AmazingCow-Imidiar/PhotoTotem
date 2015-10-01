@@ -2,11 +2,11 @@
     "static_sprites" : [
         {
             "position" : [0, 0],
-            "image" : "./imgs/Sprite_Background.png"
+            "image" : "../imgs/Sprite_Background.png"
         },
         {
            "position" : [0, 0],
-            "image" : "./imgs/Sprite_Tkns.png"
+            "image" : "../imgs/Sprite_Tkns.png"
         }
 
     ]

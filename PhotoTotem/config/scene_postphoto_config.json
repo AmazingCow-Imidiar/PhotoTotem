@@ -1,25 +1,25 @@
 {
     "photo_placeholder" : {
         "position" : [14, 47],
-        "image"    : "./imgs/Sprite_CameraPlaceholder.png"
+        "image"    : "../imgs/Sprite_CameraPlaceholder.png"
     },
 
     "accept_button" : {
         "position"      : [156, 230],
-        "normal_image"  : "./imgs/Button_Share_Normal.png",
-        "pressed_image" : "./imgs/Button_Share_Pressed.png"
+        "normal_image"  : "../imgs/Button_Share_Normal.png",
+        "pressed_image" : "../imgs/Button_Share_Pressed.png"
     },
 
     "reject_button" : {
         "position"      : [24, 230],
-        "normal_image"  : "./imgs/Button_Delete_Normal.png",
-        "pressed_image" : "./imgs/Button_Delete_Pressed.png"
+        "normal_image"  : "../imgs/Button_Delete_Normal.png",
+        "pressed_image" : "../imgs/Button_Delete_Pressed.png"
     },
 
     "static_sprites" : [
         {
             "position" : [0, 0],
-            "image" : "./imgs/Sprite_Background.png"
+            "image" : "../imgs/Sprite_Background.png"
         }
     ]
 

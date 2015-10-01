@@ -24,6 +24,8 @@
 import os;
 import json;
 import time;
+#Pygame
+import pygame;
 #Project
 import scene_manager;
 import config_validation;
@@ -42,12 +44,14 @@ class PostPhotoScene(BaseScene):
     ############################################################################
     #Required Keys.
     __REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE = "photo_placeholder";
+    __REQUIRED_KEY_PHOTO_FRAME_SPRITE       = "photo_frame";
     __REQUIRED_KEY_ACCEPT_BUTTON            = "accept_button";
     __REQUIRED_KEY_REJECT_BUTTON            = "reject_button";
     __REQUIRED_KEY_STATIC_SPRITES           = "static_sprites";
 
     __REQUIRED_KEYS = [
         __REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE,
+        __REQUIRED_KEY_PHOTO_FRAME_SPRITE,
         __REQUIRED_KEY_ACCEPT_BUTTON,
         __REQUIRED_KEY_REJECT_BUTTON,
         __REQUIRED_KEY_STATIC_SPRITES,
@@ -56,7 +60,8 @@ class PostPhotoScene(BaseScene):
     #Layers.
     __LAYER_INDEX_STATIC_SPRITE = 1;
     __LAYER_INDEX_CAMERA_SPRITE = 2;
-    __LAYER_INDEX_BUTTONS       = 3;
+    __LAYER_INDEX_FRAME_SPRITE  = 3;
+    __LAYER_INDEX_BUTTONS       = 4;
 
 
     ############################################################################
@@ -77,6 +82,7 @@ class PostPhotoScene(BaseScene):
         self.__accept_button = None;
         self.__reject_button = None;
         self.__photo_sprite  = None;
+        self.__frame_sprite  = None;
 
 
     ############################################################################
@@ -108,6 +114,7 @@ class PostPhotoScene(BaseScene):
         #Init the UI.
         self.__init_static_sprites();
         self.__init_photo_sprite();
+        self.__init_frame_sprite();
         self.__init_buttons();
 
 
@@ -139,6 +146,35 @@ class PostPhotoScene(BaseScene):
         #Add to scene.
         self.add(self.__photo_sprite,
                  layer = PostPhotoScene.__LAYER_INDEX_CAMERA_SPRITE);
+
+
+    def __init_frame_sprite(self):
+        #Get the info.
+        info = self.__file_contents[PostPhotoScene.__REQUIRED_KEY_PHOTO_FRAME_SPRITE];
+
+        #Don't need the frame...
+        if(info == False):
+            return;
+
+        #Init the sprite.
+        self.__frame_sprite = Sprite();
+
+        #Set the sprite properties.
+        self.__frame_sprite.load_image(info["image"]);
+        self.__frame_sprite.set_position(info["position"]);
+
+        #Frame isn't same size of camera image, so scale it.
+        photo_sprite_size = self.__photo_sprite.get_size();
+        if(self.__frame_sprite.get_size() != photo_sprite_size):
+            frame_image  = self.__frame_sprite.image;
+            scaled_image = pygame.transform.scale(frame_image,
+                                                  photo_sprite_size);
+
+            self.__frame_sprite.update_image(scaled_image);
+
+        #Add to scene.
+        self.add(self.__frame_sprite,
+                 layer = PostPhotoScene.__LAYER_INDEX_FRAME_SPRITE);
 
 
     def __init_buttons(self):

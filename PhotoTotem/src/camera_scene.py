@@ -23,6 +23,8 @@
 #Python
 import os;
 import json;
+#Pygame
+import pygame;
 #Project
 import scene_manager;
 import config_validation;
@@ -40,12 +42,14 @@ class CameraScene(BaseScene):
     ############################################################################
     #Required Keys.
     __REQUIRED_KEY_CAMERA_PLACEHOLDER_SPRITE = "camera_placeholder";
+    __REQUIRED_KEY_CAMERA_FRAME_SPRITE       = "camera_frame";
     __REQUIRED_KEY_TAKEPHOTO_BUTTON          = "take_photo";
     __REQUIRED_KEY_STATIC_SPRITES            = "static_sprites";
     __REQUIRED_KEY_COUNTDOWN_SPRITES         = "countdown";
 
     __REQUIRED_KEYS = [
         __REQUIRED_KEY_CAMERA_PLACEHOLDER_SPRITE,
+        __REQUIRED_KEY_CAMERA_FRAME_SPRITE,
         __REQUIRED_KEY_TAKEPHOTO_BUTTON,
         __REQUIRED_KEY_STATIC_SPRITES,
         __REQUIRED_KEY_COUNTDOWN_SPRITES,
@@ -57,8 +61,9 @@ class CameraScene(BaseScene):
     #Layers.
     __LAYER_INDEX_STATIC_SPRITE    = 1;
     __LAYER_INDEX_CAMERA_SPRITE    = 2;
-    __LAYER_INDEX_PHOTO_BUTTON     = 3;
-    __LAYER_INDEX_COUNTDOWN_SPRITE = 4;
+    __LAYER_INDEX_FRAME_SPRITE     = 3;
+    __LAYER_INDEX_PHOTO_BUTTON     = 4;
+    __LAYER_INDEX_COUNTDOWN_SPRITE = 5;
 
 
     ############################################################################
@@ -78,6 +83,7 @@ class CameraScene(BaseScene):
         #UI Elements.
         self.__countdown_sprite  = None;
         self.__camera_sprite     = None;
+        self.__frame_sprite      = None;
         self.__take_photo_button = None;
 
         #Countdown clock.
@@ -111,6 +117,7 @@ class CameraScene(BaseScene):
         #Init the UI.
         self.__init_static_sprites();
         self.__init_camera_sprite();
+        self.__init_frame_sprite();
         self.__init_buttons();
         self.__init_countdown_sprite();
 
@@ -145,6 +152,34 @@ class CameraScene(BaseScene):
                  layer = CameraScene.__LAYER_INDEX_CAMERA_SPRITE);
 
         self.__camera_sprite_size = self.__camera_sprite.get_size();
+
+    def __init_frame_sprite(self):
+        #Get the info.
+        info = self.__file_contents[CameraScene.__REQUIRED_KEY_CAMERA_FRAME_SPRITE];
+
+        #Don't need the frame...
+        if(info == False):
+            return;
+
+        #Init the sprite.
+        self.__frame_sprite = Sprite();
+
+        #Set the sprite properties.
+        self.__frame_sprite.load_image(info["image"]);
+        self.__frame_sprite.set_position(info["position"]);
+
+        #Frame isn't same size of camera image, so scale it.
+        if(self.__frame_sprite.get_size() != self.__camera_sprite_size):
+            frame_image  = self.__frame_sprite.image;
+            scaled_image = pygame.transform.scale(frame_image,
+                                                  self.__camera_sprite_size);
+
+            self.__frame_sprite.update_image(scaled_image);
+
+
+        #Add to scene.
+        self.add(self.__frame_sprite,
+                 layer = CameraScene.__LAYER_INDEX_FRAME_SPRITE);
 
 
     def __init_buttons(self):

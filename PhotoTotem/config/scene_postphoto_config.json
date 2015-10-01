@@ -4,6 +4,12 @@
         "image"    : "../imgs/Sprite_CameraPlaceholder.png"
     },
 
+    "photo_frame" : {
+        "position" : [14, 47],
+        "image"    : "../imgs/Moldura12.png"
+    },
+
+
     "accept_button" : {
         "position"      : [156, 230],
         "normal_image"  : "../imgs/Button_Share_Normal.png",

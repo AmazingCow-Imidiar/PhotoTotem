@@ -39,10 +39,14 @@ class Config(object):
     #Required keys.
     __REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
     __REQUIRED_KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
+    __REQUIRED_KEY_PHOTO_OUTPUT_FOLDER   = "image_output_folder";
+    __REQUIRED_KEY_RUNTIME_PHOTO_MERGE   = "runtime_photo_merge";
 
     __REQUIRED_KEYS = [
         __REQUIRED_KEY_CAMERA_FILENAME,
         __REQUIRED_KEY_SCENEMANAGER_FILENAME,
+        __REQUIRED_KEY_PHOTO_OUTPUT_FOLDER,
+        __REQUIRED_KEY_RUNTIME_PHOTO_MERGE,
     ];
 
 
@@ -108,5 +112,9 @@ class Config(object):
     def get_scene_manager_config_filename(self):
         return self.__file_contents[Config.__REQUIRED_KEY_SCENEMANAGER_FILENAME];
 
+    def get_image_output_path(self):
+        return self.__file_contents[Config.__REQUIRED_KEY_PHOTO_OUTPUT_FOLDER];
 
+    def get_runtime_merge(self):
+        return self.__file_contents[Config.__REQUIRED_KEY_RUNTIME_PHOTO_MERGE];
 

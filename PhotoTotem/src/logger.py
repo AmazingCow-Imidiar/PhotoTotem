@@ -18,22 +18,25 @@
 ##                                                                            ##
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
+
 ## Imports ##
 #Python
 import os;
 import os.path;
 import time;
 #Project
-from gui import GUI;
+import filesystem;
+from   gui import GUI;
 
 class Logger(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
-    #COWTODO: Move the log error to correct place.
-    __LOG_FILE_PATH     = "./LOG";
-    #COWTODO: Make the creation of log filename better.
-    __LOG_FILE_FILENAME = os.path.join(__LOG_FILE_PATH, "RuntimeLog-{}.txt".format(time.ctime()).replace(" ", "_"));
+    __LOG_FILE_PATH     = filesystem.canonical_path("~/Documents/AmazingPhotoTotem_LOG");
+    __LOG_FILE_FILENAME = filesystem.canonical_path(
+                __LOG_FILE_PATH,
+                "RuntimeLog-{}.txt".format(time.ctime()).replace(" ", "_")
+    );
 
    ############################################################################
     ## Singleton                                                              ##
@@ -56,6 +59,7 @@ class Logger(object):
         #Check if the log dir/file is ok.
         self.__check_dirs_and_files();
 
+
     ############################################################################
     ## Log Methods                                                            ##
     ############################################################################
@@ -70,12 +74,12 @@ class Logger(object):
 
         exit(1);
 
-
     def __log(self, *msg):
         msg = time.ctime() + " -- " + " ".join(map(str, msg));
         echo_cmd = "echo {} >> {}".format(self.__escape_msg(msg),
                                           Logger.__LOG_FILE_FILENAME);
         self.__system_cmd(echo_cmd);
+
 
     ############################################################################
     ## Other Methods                                                          ##
@@ -85,6 +89,7 @@ class Logger(object):
         if(not os.path.isdir(Logger.__LOG_FILE_PATH)):
             mkdir_cmd = "mkdir -p {}".format(Logger.__LOG_FILE_PATH);
             self.__system_cmd(mkdir_cmd);
+
         #Check if log file exists and create one if not.
         if(not os.path.isfile(Logger.__LOG_FILE_FILENAME)):
             touch_cmd = "touch {}".format(Logger.__LOG_FILE_FILENAME);

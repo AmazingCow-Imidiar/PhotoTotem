@@ -23,16 +23,18 @@
 #Python
 import os;
 import json;
+import time;
 #Project
-from logger     import Logger;
-from camera     import Camera;
-from base_scene import BaseScene;
-from widgets    import Sprite;
-from widgets    import Button;
-from clock      import BasicClock;
-import scene_manager; #Not from ... import to avoid circular imports.
+import scene_manager;
 import config_validation;
 import filesystem;
+from   logger     import Logger;
+from   camera     import Camera;
+from   base_scene import BaseScene;
+from   widgets    import Sprite;
+from   widgets    import Button;
+from   clock      import BasicClock;
+
 
 class PostPhotoScene(BaseScene):
     ############################################################################
@@ -51,7 +53,7 @@ class PostPhotoScene(BaseScene):
         __REQUIRED_KEY_STATIC_SPRITES,
     ];
 
-    #COWTODO: COMMENT.
+    #Layers.
     __LAYER_INDEX_STATIC_SPRITE = 1;
     __LAYER_INDEX_CAMERA_SPRITE = 2;
     __LAYER_INDEX_BUTTONS       = 3;
@@ -76,6 +78,7 @@ class PostPhotoScene(BaseScene):
         self.__reject_button = None;
         self.__photo_sprite  = None;
 
+
     ############################################################################
     ## Overriden Methods                                                      ##
     ############################################################################
@@ -89,6 +92,7 @@ class PostPhotoScene(BaseScene):
 
     def end(self):
         Logger.instance().log_debug("PostPhotoScene.end");
+
 
     ############################################################################
     ## Init                                                                   ##
@@ -182,8 +186,11 @@ class PostPhotoScene(BaseScene):
     ## Button Callbacks                                                       ##
     ############################################################################
     def __on_accept_button_pressed(self):
+        #Save the photo on disk...
+        filesystem.save_photo(Camera.instance().get_last_photo(),
+                              use_another_thread = True);
+        #Change to other scene.
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=False);
-        filesystem.save_photo(Camera.instance().get_last_photo(), None);
 
     def __on_reject_button_pressed(self):
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=True);

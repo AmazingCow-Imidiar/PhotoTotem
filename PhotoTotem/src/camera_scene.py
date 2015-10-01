@@ -24,14 +24,15 @@
 import os;
 import json;
 #Project
-from logger     import Logger;
-from camera     import Camera;
-from base_scene import BaseScene;
-from widgets    import Sprite;
-from widgets    import Button;
-from clock      import BasicClock;
-import scene_manager; #Not from ... import to avoid circular imports.
+import scene_manager;
 import config_validation;
+from   logger     import Logger;
+from   camera     import Camera;
+from   base_scene import BaseScene;
+from   widgets    import Sprite;
+from   widgets    import Button;
+from   clock      import BasicClock;
+
 
 class CameraScene(BaseScene):
     ############################################################################
@@ -50,13 +51,15 @@ class CameraScene(BaseScene):
         __REQUIRED_KEY_COUNTDOWN_SPRITES,
     ];
 
-    #COWTODO: COMMENT.
-    __COUNTDOWN_CLOCK_TIME = 100;
+    #How much time each countdown step will take (in ms).
+    __COUNTDOWN_CLOCK_TIME = 10;
 
+    #Layers.
     __LAYER_INDEX_STATIC_SPRITE    = 1;
     __LAYER_INDEX_CAMERA_SPRITE    = 2;
     __LAYER_INDEX_PHOTO_BUTTON     = 3;
     __LAYER_INDEX_COUNTDOWN_SPRITE = 4;
+
 
     ############################################################################
     ## CTOR                                                                   ##
@@ -83,6 +86,7 @@ class CameraScene(BaseScene):
 
         self.__camera_sprite_size = None;
 
+
     ############################################################################
     ## Overriden Methods                                                      ##
     ############################################################################
@@ -91,6 +95,7 @@ class CameraScene(BaseScene):
 
     def end(self):
         Logger.instance().log_debug("CameraScene.end");
+
 
     ############################################################################
     ## Init                                                                   ##
@@ -140,6 +145,7 @@ class CameraScene(BaseScene):
                  layer = CameraScene.__LAYER_INDEX_CAMERA_SPRITE);
 
         self.__camera_sprite_size = self.__camera_sprite.get_size();
+
 
     def __init_buttons(self):
         #Initialize the button.

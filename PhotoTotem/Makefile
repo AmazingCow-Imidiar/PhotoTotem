@@ -18,6 +18,10 @@
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
 
+#COWTODO: Perform the installation of required libs.
+#pygame,
+#pyqt
+
 #Where the Photo Totem will be installed.
 DST_DIR=~/Desktop/PhotoTotem
 

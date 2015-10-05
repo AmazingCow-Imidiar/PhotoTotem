@@ -62,9 +62,6 @@ class Camera(object):
     ## CTOR                                                                   ##
     ############################################################################
     def __init__(self):
-        #COWTODO: Remove.
-        print "Camera.__init__";
-
         ## iVars ##
         #Configuration stuff.
         self.__config_filename = None;

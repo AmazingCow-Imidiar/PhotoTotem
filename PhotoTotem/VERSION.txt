@@ -30,4 +30,4 @@
 ## The REVISION versions are mostly for bug fixes.
 ## The BUILD version is only to get info about how many builds was made.
 ##
-0.0.0.4
+0.0.0.5

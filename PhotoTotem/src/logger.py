@@ -53,9 +53,6 @@ class Logger(object):
     ## CTOR                                                                   ##
     ############################################################################
     def __init__(self):
-        #COWTODO: Remove
-        print "Logger.__init__";
-
         #Check if the log dir/file is ok.
         self.__check_dirs_and_files();
 

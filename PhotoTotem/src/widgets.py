@@ -73,8 +73,6 @@ class Button(Sprite):
     ############################################################################
     def __init__(self):
         Sprite.__init__(self);
-        #COWTODO: Remove.
-        print "Button.__init__";
 
         ## iVars #
         self.__normal_surface  = None;
@@ -143,7 +141,3 @@ class Button(Sprite):
         pos = pygame.mouse.get_pos();
         if(self.rect.collidepoint(pos) and self.__click_callback is not None):
             self.__click_callback();
-
-    def __onMouseMotion(self):
-        #COWTODO: Implement.
-        pass;

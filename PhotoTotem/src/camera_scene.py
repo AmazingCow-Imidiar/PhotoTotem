@@ -72,9 +72,6 @@ class CameraScene(BaseScene):
     def __init__(self):
         BaseScene.__init__(self);
 
-        #COWTODO: Remove it.
-        print "CameraScene.__init__";
-
         ## iVars ##
         #Filenames and Content.
         self.__config_filename = None;

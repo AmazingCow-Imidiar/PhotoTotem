@@ -79,9 +79,6 @@ class SceneManager(object):
     ## CTOR                                                                   ##
     ############################################################################
     def __init__(self):
-        #COWTODO: Remove.
-        print "SceneManager.__init__";
-
         ## iVars ##
         self.__config_filename = None;
         self.__file_contents   = None;

@@ -116,9 +116,7 @@ class Button(Sprite):
         if(event.type == pygame.locals.MOUSEBUTTONDOWN):
             self.__onMouseButtonDown();
         elif(event.type == pygame.locals.MOUSEBUTTONUP):
-            self.__onMouseButtonUp();
-        elif(event.type == pygame.locals.MOUSEMOTION):
-            self.__onMouseMotion();
+            self.__onMouseButtonUp();        
 
 
     ############################################################################

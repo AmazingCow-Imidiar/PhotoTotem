@@ -208,11 +208,7 @@ class CameraScene(BaseScene):
 
         #Set the sprite properties.
         self.__countdown_sprite.set_position(info["position"]);
-        self.__countdown_sprite.load_image(info["sprites"][0]);
-
-        #Add to scene.
-        self.add(self.__countdown_sprite,
-                 layer = CameraScene.__LAYER_INDEX_COUNTDOWN_SPRITE);
+        self.__countdown_sprite.load_image(info["sprites"][0]);    
 
 
     ############################################################################

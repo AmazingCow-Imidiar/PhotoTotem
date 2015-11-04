@@ -56,7 +56,7 @@ class CameraScene(BaseScene):
     ];
 
     #How much time each countdown step will take (in ms).
-    __COUNTDOWN_CLOCK_TIME = 10;
+    __COUNTDOWN_CLOCK_TIME = 1000;
 
     #Layers.
     __LAYER_INDEX_STATIC_SPRITE    = 1;

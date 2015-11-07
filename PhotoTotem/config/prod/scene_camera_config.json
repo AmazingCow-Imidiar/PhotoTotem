@@ -1,0 +1,36 @@
+{
+    "camera_placeholder" : {
+        "position" : [51, 48],
+        "image"    : "../imgs/prod/Sprite_CameraPlaceholder.png"
+    },
+
+    "camera_frame" : {
+        "position" : [51, 48],
+        "image"    : "../imgs/prod/Moldura.png"
+    },
+
+    "take_photo" : {
+        "position"      : [278, 768],
+        "normal_image"  : "../imgs/prod/Button_Photo_Normal.png",
+        "pressed_image" : "../imgs/prod/Button_Photo_Pressed.png"
+    },
+
+    "countdown" : {
+        "position"  : [468, 670],
+        "sprites" : [
+            "../imgs/prod/Sprite_Count5.png",
+            "../imgs/prod/Sprite_Count4.png",
+            "../imgs/prod/Sprite_Count3.png",
+            "../imgs/prod/Sprite_Count2.png",
+            "../imgs/prod/Sprite_Count1.png"
+        ]
+    },
+
+    "static_sprites" : [
+        {
+            "position" : [0, 0],
+            "image" : "../imgs/prod/Sprite_Background.png"
+        }
+    ]
+
+}

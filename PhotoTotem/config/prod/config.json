@@ -1,0 +1,6 @@
+{
+    "camera_config_filename"        : "../config/prod/camera_config.json",
+    "scene_manager_config_filename" : "../config/prod/scene_manager_config.json",
+    "image_output_folder"           : "~/Desktop/PhotoTotem/photos",
+    "runtime_photo_merge"           : true
+}

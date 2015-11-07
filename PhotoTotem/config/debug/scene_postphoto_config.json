@@ -1,0 +1,32 @@
+{
+    "photo_placeholder" : {
+        "position" : [14, 47],
+        "image"    : "../imgs/debug/Sprite_CameraPlaceholder.png"
+    },
+
+    "photo_frame" : {
+        "position" : [14, 47],
+        "image"    : "../imgs/debug/Moldura.png"
+    },
+
+
+    "accept_button" : {
+        "position"      : [156, 230],
+        "normal_image"  : "../imgs/debug/Button_Share_Normal.png",
+        "pressed_image" : "../imgs/debug/Button_Share_Pressed.png"
+    },
+
+    "reject_button" : {
+        "position"      : [24, 230],
+        "normal_image"  : "../imgs/debug/Button_Delete_Normal.png",
+        "pressed_image" : "../imgs/debug/Button_Delete_Pressed.png"
+    },
+
+    "static_sprites" : [
+        {
+            "position" : [0, 0],
+            "image" : "../imgs/debug/Sprite_Background.png"
+        }
+    ]
+
+}

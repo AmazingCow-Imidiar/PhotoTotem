@@ -1,0 +1,4 @@
+{
+    "camera_resolution" : [1280,960],
+    "camera_device"     : "/dev/video0"
+}

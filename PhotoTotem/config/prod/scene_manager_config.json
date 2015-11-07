@@ -1,0 +1,12 @@
+{
+    "window_size"              : [1050, 1680],
+
+    "scene_camera_filename"    : "../config/prod/scene_camera_config.json",
+    "scene_postphoto_filename" : "../config/prod/scene_postphoto_config.json",
+    "scene_filter_filename"    : "../config/prod/scene_filter_config.json",
+    "scene_done_filename"      : "../config/prod/scene_done_config.json",
+
+    "scene_postphoto_enabled"  : "",
+    "scene_filter_enabled"     : "",
+    "scene_done_enabled"       : ""
+}

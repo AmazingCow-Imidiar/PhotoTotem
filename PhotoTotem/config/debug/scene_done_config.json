@@ -1,0 +1,14 @@
+{
+    "static_sprites" : [
+        {
+            "position" : [0, 0],
+            "image" : "../imgs/debug/Sprite_Background.png"
+        },
+        {
+           "position" : [0, 0],
+            "image" : "../imgs/debug/Sprite_Tkns.png"
+        }
+
+    ]
+
+}

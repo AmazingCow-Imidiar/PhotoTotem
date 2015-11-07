@@ -67,9 +67,10 @@ class Camera(object):
         self._config_filename = None;
         self._file_contents   = None;
         #Camera stuff.
-        self._resolution = None;
-        self._device     = None;
-        self._camera     = None;
+        self._resolution     = None;
+        self._device         = None;
+        self._camera         = None;
+        self._camera_surface = None;
         #Photos.
         self._last_photo = None;
         #Dummy Camera.
@@ -120,6 +121,7 @@ class Camera(object):
                 self._camera = pygame.camera.Camera(self._device,
                                                      self._resolution);
                 self._camera.start();
+                self._camera_surface = self._camera.get_image();
 
         #All errors here are fatal.
         except Exception, e:
@@ -148,7 +150,7 @@ class Camera(object):
             self._camera.stop();
 
     def get_frame(self, scale_to = None):
-        img = None;
+        img = self._camera_surface;
 
         #When using a dummy camera, get the current time and blit it
         #onto the dummy_image - The result is a generation of the "new"
@@ -164,7 +166,11 @@ class Camera(object):
 
         #When not using the dummy camera, just grab the current camera frame.
         else:
-            img = self._camera.get_image();
+            #Decouple the camera from the fps.
+            #So if camera is ready we return the new frame,
+            #otherwise we just return the old Frame.
+            if(self._camera.query_image()):
+                img = self._camera.get_image(self._camera_surface);
 
 
         return self._scale_img(img, scale_to);

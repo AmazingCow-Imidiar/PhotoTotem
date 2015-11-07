@@ -39,8 +39,6 @@ def canonical_path(*args):
 
 
 def save_photo(image_to_save, use_another_thread = True):
-    logger.Logger.instance().log_debug("Filesystem.save_photo");
-
     #Get the path that photo will be saved.
     out_path = config.Config.instance().get_image_output_path();
 
@@ -49,8 +47,13 @@ def save_photo(image_to_save, use_another_thread = True):
     image_name = time.asctime().replace(" ", "_").replace(":", "_") + ".png";
     fullpath   = canonical_path(dir_path, image_name);
 
+    logger.Logger.instance().log_debug("Filesystem.save_photo - {}".format(fullpath));
+
     #Create the diretory if it doesn't exists already.
     if(not os.path.isdir(dir_path)):
+        msg = "Filesystem.save_photo - Directory doesn't exists... creating one now.";
+        logger.Logger.instance().log_debug(msg)
+
         os.system("mkdir -p {}".format(dir_path));
 
     #Two of save... Fist one is in the main thread, blocking the UI.

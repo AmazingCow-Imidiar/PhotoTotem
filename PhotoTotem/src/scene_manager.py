@@ -168,8 +168,11 @@ class SceneManager(object):
 
     def __handle_events(self):
         for event in pygame.event.get():
-            if(event.type == pygame.locals.QUIT):
+            #Quit event or Escape key.
+            if((event.type == pygame.locals.QUIT or
+                event.type == pygame.locals.KEYDOWN and event.key == pygame.locals.K_ESCAPE)):
                 self.__app_running = False;
+            #Everything else.
             else:
                 self.__scene_current.handle_events(event);
 

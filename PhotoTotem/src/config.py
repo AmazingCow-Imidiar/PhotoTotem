@@ -33,39 +33,39 @@ class Config(object):
     ## Constants                                                              ##
     ############################################################################
     #Flags.
-    __FLAG_CONFIG       = "config";
-    __FLAG_DUMMY_CAMERA = "dummy-camera"
+    _FLAG_CONFIG       = "config";
+    _FLAG_DUMMY_CAMERA = "dummy-camera"
 
-    __ALL_FLAGS_SHORT = "";
-    __ALL_FLAGS_LONG  = [
-        __FLAG_CONFIG + "=",
-        __FLAG_DUMMY_CAMERA
+    _ALL_FLAGS_SHORT = "";
+    _ALL_FLAGS_LONG  = [
+        _FLAG_CONFIG + "=",
+        _FLAG_DUMMY_CAMERA
     ];
 
     #Required keys.
-    __REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
-    __REQUIRED_KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
-    __REQUIRED_KEY_PHOTO_OUTPUT_FOLDER   = "image_output_folder";
-    __REQUIRED_KEY_RUNTIME_PHOTO_MERGE   = "runtime_photo_merge";
+    _REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
+    _REQUIRED_KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
+    _REQUIRED_KEY_PHOTO_OUTPUT_FOLDER   = "image_output_folder";
+    _REQUIRED_KEY_RUNTIME_PHOTO_MERGE   = "runtime_photo_merge";
 
-    __REQUIRED_KEYS = [
-        __REQUIRED_KEY_CAMERA_FILENAME,
-        __REQUIRED_KEY_SCENEMANAGER_FILENAME,
-        __REQUIRED_KEY_PHOTO_OUTPUT_FOLDER,
-        __REQUIRED_KEY_RUNTIME_PHOTO_MERGE,
+    _REQUIRED_KEYS = [
+        _REQUIRED_KEY_CAMERA_FILENAME,
+        _REQUIRED_KEY_SCENEMANAGER_FILENAME,
+        _REQUIRED_KEY_PHOTO_OUTPUT_FOLDER,
+        _REQUIRED_KEY_RUNTIME_PHOTO_MERGE,
     ];
 
 
     ############################################################################
     ## Singleton                                                              ##
     ############################################################################
-    __instance = None;
+    _instance = None;
     @staticmethod
     def instance():
-        if(Config.__instance is None):
-            Config.__instance = Config();
+        if(Config._instance is None):
+            Config._instance = Config();
 
-        return Config.__instance;
+        return Config._instance;
 
 
     ############################################################################
@@ -73,9 +73,9 @@ class Config(object):
     ############################################################################
     def __init__(self):
         ## iVars ##
-        self.__config_filename = None;
-        self.__file_contents   = None;
-        self.__dummy_camera    = False;
+        self._config_filename = None;
+        self._file_contents   = None;
+        self._dummy_camera    = False;
 
 
     ############################################################################
@@ -87,8 +87,8 @@ class Config(object):
         #Try to get the command line options.
         try:
             options = getopt.gnu_getopt(sys.argv[1:],
-                                        Config.__ALL_FLAGS_SHORT,
-                                        Config.__ALL_FLAGS_LONG);
+                                        Config._ALL_FLAGS_SHORT,
+                                        Config._ALL_FLAGS_LONG);
         except Exception, e:
             Logger.instance().log_fatal(e);
 
@@ -98,33 +98,33 @@ class Config(object):
             key = key.lstrip("-");
 
             #Configuration filename.
-            if(key in Config.__FLAG_CONFIG):
-                self.__config_filename = value;
+            if(key in Config._FLAG_CONFIG):
+                self._config_filename = value;
             #Use dummy camera.
-            elif(key in Config.__FLAG_DUMMY_CAMERA):
-                self.__dummy_camera = True;
+            elif(key in Config._FLAG_DUMMY_CAMERA):
+                self._dummy_camera = True;
 
         #Check if file is valid.
-        self.__file_contents = config_validation.validate("Config",
-                                                          self.__config_filename,
-                                                          Config.__REQUIRED_KEYS);
+        self._file_contents = config_validation.validate("Config",
+                                                          self._config_filename,
+                                                          Config._REQUIRED_KEYS);
 
 
     ############################################################################
     ## Getters                                                                ##
     ############################################################################
     def get_camera_config_filename(self):
-        return self.__file_contents[Config.__REQUIRED_KEY_CAMERA_FILENAME];
+        return self._file_contents[Config._REQUIRED_KEY_CAMERA_FILENAME];
 
     def get_dummy_camera(self):
-        return self.__dummy_camera;
+        return self._dummy_camera;
 
     def get_scene_manager_config_filename(self):
-        return self.__file_contents[Config.__REQUIRED_KEY_SCENEMANAGER_FILENAME];
+        return self._file_contents[Config._REQUIRED_KEY_SCENEMANAGER_FILENAME];
 
     def get_image_output_path(self):
-        return self.__file_contents[Config.__REQUIRED_KEY_PHOTO_OUTPUT_FOLDER];
+        return self._file_contents[Config._REQUIRED_KEY_PHOTO_OUTPUT_FOLDER];
 
     def get_runtime_merge(self):
-        return self.__file_contents[Config.__REQUIRED_KEY_RUNTIME_PHOTO_MERGE];
+        return self._file_contents[Config._REQUIRED_KEY_RUNTIME_PHOTO_MERGE];
 

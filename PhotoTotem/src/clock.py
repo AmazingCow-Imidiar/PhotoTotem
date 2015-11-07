@@ -27,73 +27,73 @@ class BasicClock(object):
     def __init__(self, time, tick_callback = None):
 
         ## iVars ##
-        self.__tick_time            = time;
-        self.__time_since_last_tick = None;
-        self.__enabled              = False;
-        self.__ticks_count          = 0;
-        self.__tick_callback        = tick_callback;
+        self._tick_time            = time;
+        self._time_since_last_tick = None;
+        self._enabled              = False;
+        self._ticks_count          = 0;
+        self._tick_callback        = tick_callback;
 
 
     ############################################################################
     ## Set/Get Time                                                           ##
     ############################################################################
     def set_time(self, time):
-        self.__time_since_last_tick = 0;
-        self.__tick_time            = time;
+        self._time_since_last_tick = 0;
+        self._tick_time            = time;
 
     def get_time(self):
-        return self.__tick_time;
+        return self._tick_time;
 
     ############################################################################
     ## Start/Stop/Enabled                                                     ##
     ############################################################################
     def start(self):
-        self.__enabled              = True;
-        self.__time_since_last_tick = 0;
-        self.__ticks_count          = 0;
+        self._enabled              = True;
+        self._time_since_last_tick = 0;
+        self._ticks_count          = 0;
 
     def stop(self):
-        self.__enabled = False;
+        self._enabled = False;
 
     def is_enabled(self):
-        return self.__enabled;
+        return self._enabled;
 
 
     ############################################################################
     ## Ticks Count                                                            ##
     ############################################################################
     def get_ticks_count(self):
-        return self.__ticks_count;
+        return self._ticks_count;
 
 
     ############################################################################
     ## Set/Get Callback                                                       ##
     ############################################################################
     def set_callback(self, callback):
-        self.__tick_callback = callback;
+        self._tick_callback = callback;
 
     def get_callback(self):
-        return self.__tick_callback;
+        return self._tick_callback;
 
 
     ############################################################################
     ## Update                                                                 ##
     ############################################################################
     def update(self, dt):
-        if(not self.__enabled):
+        if(not self._enabled):
             return;
 
         #Update the timer...
-        self.__time_since_last_tick += dt;
-        if(self.__time_since_last_tick >= self.__tick_time):
-            self.__time_since_last_tick -= self.__tick_time;
+        self._time_since_last_tick += dt;
+        if(self._time_since_last_tick >= self._tick_time):
+            self._time_since_last_tick -= self._tick_time;
 
             #Update the ticks count.
-            self.__ticks_count += 1;
+            self._ticks_count += 1;
 
             #We have a valid callback?
-            assert self.__tick_callback is not None;
-            self.__tick_callback();
+            assert self._tick_callback is not None;
+            self._tick_callback();
 
 
 

@@ -39,17 +39,17 @@ class DoneScene(BaseScene):
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
-    __REQUIRED_KEY_STATIC_SPRITES = "static_sprites";
+    _REQUIRED_KEY_STATIC_SPRITES = "static_sprites";
 
-    __REQUIRED_KEYS = [
-        __REQUIRED_KEY_STATIC_SPRITES,
+    _REQUIRED_KEYS = [
+        _REQUIRED_KEY_STATIC_SPRITES,
     ];
 
     #Layers.
-    __LAYER_INDEX_STATIC_SPRITE = 1;
+    _LAYER_INDEX_STATIC_SPRITE = 1;
 
     #How much time the scene will stay active (in ms).
-    __SCENE_TIMER_TIME = 1000;
+    _SCENE_TIMER_TIME = 1000;
 
 
     ############################################################################
@@ -60,12 +60,12 @@ class DoneScene(BaseScene):
 
         ## iVars ##
         #Filenames and Content.
-        self.__config_filename = None;
-        self.__file_contents   = None;
+        self._config_filename = None;
+        self._file_contents   = None;
 
         #Scene timer.
-        self.__scene_timer = BasicClock(DoneScene.__SCENE_TIMER_TIME,
-                                        self.__on_scene_timer_tick);
+        self._scene_timer = BasicClock(DoneScene._SCENE_TIMER_TIME,
+                                        self._on_scene_timer_tick);
 
 
     ############################################################################
@@ -74,7 +74,7 @@ class DoneScene(BaseScene):
     def start(self):
         Logger.instance().log_debug("DoneScene.start");
         #Start the timer just as the scene became active.
-        self.__scene_timer.start();
+        self._scene_timer.start();
 
     def end(self):
         Logger.instance().log_debug("DoneScene.end");
@@ -86,18 +86,18 @@ class DoneScene(BaseScene):
     def init(self):
         Logger.instance().log_debug("DoneScene.init");
 
-        self.__config_filename = scene_manager.SceneManager.instance().get_done_scene_filename();
+        self._config_filename = scene_manager.SceneManager.instance().get_done_scene_filename();
 
         #Validate the configuration.
-        self.__file_contents = config_validation.validate("DoneScene",
-                                                          self.__config_filename,
-                                                          DoneScene.__REQUIRED_KEYS);
+        self._file_contents = config_validation.validate("DoneScene",
+                                                          self._config_filename,
+                                                          DoneScene._REQUIRED_KEYS);
         #Init the UI.
-        self.__init_static_sprites();
+        self._init_static_sprites();
 
 
-    def __init_static_sprites(self):
-        sprite_list = self.__file_contents[DoneScene.__REQUIRED_KEY_STATIC_SPRITES];
+    def _init_static_sprites(self):
+        sprite_list = self._file_contents[DoneScene._REQUIRED_KEY_STATIC_SPRITES];
         for info in sprite_list:
             #Create the sprite.
             sprite = Sprite();
@@ -107,20 +107,20 @@ class DoneScene(BaseScene):
             sprite.set_position(info["position"]);
 
             #Add to scene.
-            self.add(sprite, layer = DoneScene.__LAYER_INDEX_STATIC_SPRITE);
+            self.add(sprite, layer = DoneScene._LAYER_INDEX_STATIC_SPRITE);
 
 
     ############################################################################
     ## Update / Draw / Handle Events                                          ##
     ############################################################################
     def update(self, dt):
-        self.__scene_timer.update(dt);
+        self._scene_timer.update(dt);
 
 
     ############################################################################
     ## Timer Callbacks                                                        ##
     ############################################################################
-    def __on_scene_timer_tick(self):
+    def _on_scene_timer_tick(self):
         #Go to another scene.
         scene_manager.SceneManager.instance().scene_done_complete();
 

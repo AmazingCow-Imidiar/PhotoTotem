@@ -32,53 +32,53 @@ class Logger(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
-    __LOG_FILE_PATH     = filesystem.canonical_path("~/Documents/AmazingPhotoTotem_LOG");
-    __LOG_FILE_FILENAME = filesystem.canonical_path(
-                __LOG_FILE_PATH,
+    _LOG_FILE_PATH     = filesystem.canonical_path("~/Documents/AmazingPhotoTotem_LOG");
+    _LOG_FILE_FILENAME = filesystem.canonical_path(
+                _LOG_FILE_PATH,
                 "RuntimeLog-{}.txt".format(time.ctime()).replace(" ", "_")
     );
 
    ############################################################################
     ## Singleton                                                              ##
     ############################################################################
-    __instance = None;
+    _instance = None;
     @staticmethod
     def instance():
-        if(Logger.__instance is None):
-            Logger.__instance = Logger();
+        if(Logger._instance is None):
+            Logger._instance = Logger();
 
-        return Logger.__instance;
+        return Logger._instance;
 
     ############################################################################
     ## CTOR                                                                   ##
     ############################################################################
     def __init__(self):
         #Check if the log dir/file is ok.
-        self.__check_dirs_and_files();
+        self._check_dirs_and_files();
 
 
     ############################################################################
     ## Log Methods                                                            ##
     ############################################################################
     def log_debug(self, msg):
-        self.__log("[DEBUG]", msg);
+        self._log("[DEBUG]", msg);
 
     def log_fatal(self, msg):
         msg = str(msg);
 
         GUI().show_msg_box(msg);
-        self.__log("[FATAL]", msg);
+        self._log("[FATAL]", msg);
 
         exit(1);
 
-    def __log(self, *msg):
+    def _log(self, *msg):
         #Build the message.
         msg = time.ctime() + " -- " + " ".join(map(str, msg));
 
         #Save to the log file.
-        echo_cmd = "echo {} >> {}".format(self.__escape_msg(msg),
-                                          Logger.__LOG_FILE_FILENAME);
-        self.__system_cmd(echo_cmd);
+        echo_cmd = "echo {} >> {}".format(self._escape_msg(msg),
+                                          Logger._LOG_FILE_FILENAME);
+        self._system_cmd(echo_cmd);
 
         #Print to screen.
         print msg;
@@ -88,21 +88,21 @@ class Logger(object):
     ############################################################################
     ## Other Methods                                                          ##
     ############################################################################
-    def __check_dirs_and_files(self):
+    def _check_dirs_and_files(self):
         #Check if log folder exists and create one if not.
-        if(not os.path.isdir(Logger.__LOG_FILE_PATH)):
-            mkdir_cmd = "mkdir -p {}".format(Logger.__LOG_FILE_PATH);
-            self.__system_cmd(mkdir_cmd);
+        if(not os.path.isdir(Logger._LOG_FILE_PATH)):
+            mkdir_cmd = "mkdir -p {}".format(Logger._LOG_FILE_PATH);
+            self._system_cmd(mkdir_cmd);
 
         #Check if log file exists and create one if not.
-        if(not os.path.isfile(Logger.__LOG_FILE_FILENAME)):
-            touch_cmd = "touch {}".format(Logger.__LOG_FILE_FILENAME);
-            self.__system_cmd(touch_cmd);
+        if(not os.path.isfile(Logger._LOG_FILE_FILENAME)):
+            touch_cmd = "touch {}".format(Logger._LOG_FILE_FILENAME);
+            self._system_cmd(touch_cmd);
 
-    def __system_cmd(self, cmd):
+    def _system_cmd(self, cmd):
         if(os.system(cmd) != 0):
             print cmd, "failed";
 
-    def __escape_msg(self, msg):
+    def _escape_msg(self, msg):
         msg = msg.replace('"', '\"');
         return "\"{}\"".format(msg);

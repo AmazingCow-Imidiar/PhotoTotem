@@ -39,23 +39,23 @@ class Camera(object):
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
-    __REQUIRED_KEY_RESOLUTION = "camera_resolution";
-    __REQUIRED_KEY_DEVICE     = "camera_device";
+    _REQUIRED_KEY_RESOLUTION = "camera_resolution";
+    _REQUIRED_KEY_DEVICE     = "camera_device";
 
-    __REQUIRED_KEYS = [
-        __REQUIRED_KEY_RESOLUTION,
-        __REQUIRED_KEY_DEVICE,
+    _REQUIRED_KEYS = [
+        _REQUIRED_KEY_RESOLUTION,
+        _REQUIRED_KEY_DEVICE,
     ];
 
     ############################################################################
     ## Singleton                                                              ##
     ############################################################################
-    __instance = None;
+    _instance = None;
     @staticmethod
     def instance():
-        if(Camera.__instance is None):
-            Camera.__instance = Camera();
-        return Camera.__instance;
+        if(Camera._instance is None):
+            Camera._instance = Camera();
+        return Camera._instance;
 
 
     ############################################################################
@@ -64,17 +64,17 @@ class Camera(object):
     def __init__(self):
         ## iVars ##
         #Configuration stuff.
-        self.__config_filename = None;
-        self.__file_contents   = None;
+        self._config_filename = None;
+        self._file_contents   = None;
         #Camera stuff.
-        self.__resolution = None;
-        self.__device     = None;
-        self.__camera     = None;
+        self._resolution = None;
+        self._device     = None;
+        self._camera     = None;
         #Photos.
-        self.__last_photo = None;
+        self._last_photo = None;
         #Dummy Camera.
-        self.__dummy_camera_font  = None;
-        self.__dummy_camera_image = None;
+        self._dummy_camera_font  = None;
+        self._dummy_camera_image = None;
 
 
     ############################################################################
@@ -84,20 +84,20 @@ class Camera(object):
         Logger.instance().log_debug("Camera.init");
 
         #Get the configuration filename for camera.
-        self.__config_filename = Config.instance().get_camera_config_filename();
+        self._config_filename = Config.instance().get_camera_config_filename();
 
         #Validate the configuration.
-        self.__file_contents = config_validation.validate("Camera",
-                                                          self.__config_filename,
-                                                          Camera.__REQUIRED_KEYS);
+        self._file_contents = config_validation.validate("Camera",
+                                                          self._config_filename,
+                                                          Camera._REQUIRED_KEYS);
 
         #Set the values.
-        self.__resolution = self.__file_contents[Camera.__REQUIRED_KEY_RESOLUTION];
-        self.__device     = self.__file_contents[Camera.__REQUIRED_KEY_DEVICE];
+        self._resolution = self._file_contents[Camera._REQUIRED_KEY_RESOLUTION];
+        self._device     = self._file_contents[Camera._REQUIRED_KEY_DEVICE];
 
-        self.__init_camera_device();
+        self._init_camera_device();
 
-    def __init_camera_device(self):
+    def _init_camera_device(self):
         Logger.instance().log_debug("Camera.init_camera_device");
 
         #Initialize pygame.
@@ -109,17 +109,17 @@ class Camera(object):
             if(Config.instance().get_dummy_camera()):
                 #Font.
                 font_path = filesystem.canonical_path("./private_resources/dummy_camera_font.ttf");
-                self.__dummy_camera_font = pygame.font.Font(font_path, 50);
+                self._dummy_camera_font = pygame.font.Font(font_path, 50);
                 #Image.
                 image_path = filesystem.canonical_path("./private_resources/dummy_camera_image.png");
-                self.__dummy_camera_image = pygame.image.load(image_path);
+                self._dummy_camera_image = pygame.image.load(image_path);
             #Otherwise initialize the real camera.
             else:
                 pygame.camera.init();
                 # #Initialize the camera.
-                self.__camera = pygame.camera.Camera(self.__device,
-                                                     self.__resolution);
-                self.__camera.start();
+                self._camera = pygame.camera.Camera(self._device,
+                                                     self._resolution);
+                self._camera.start();
 
         #All errors here are fatal.
         except Exception, e:
@@ -140,12 +140,12 @@ class Camera(object):
     def start(self):
         Logger.instance().log_debug("Camera.start");
         if(not Config.instance().get_dummy_camera()):
-            self.__camera.start();
+            self._camera.start();
 
     def stop(self):
         Logger.instance().log_debug("Camera.stop");
         if(not Config.instance().get_dummy_camera()):
-            self.__camera.stop();
+            self._camera.stop();
 
     def get_frame(self, scale_to = None):
         img = None;
@@ -155,29 +155,29 @@ class Camera(object):
         #image with the current time.
         if(Config.instance().get_dummy_camera()):
             time_label = str(time.time());
-            font_surface = self.__dummy_camera_font.render(time_label,
+            font_surface = self._dummy_camera_font.render(time_label,
                                                            True,
                                                            (0, 0,  0),    #Black
                                                            (255, 0,255)); #Magenta
-            img = self.__dummy_camera_image.copy();
+            img = self._dummy_camera_image.copy();
             img.blit(font_surface, (10, 10));
 
         #When not using the dummy camera, just grab the current camera frame.
         else:
-            img = self.__camera.get_image();
+            img = self._camera.get_image();
 
 
-        return self.__scale_img(img, scale_to);
+        return self._scale_img(img, scale_to);
 
 
     def take_photo(self):
         Logger.instance().log_debug("Camera.take_photo");
-        self.__last_photo = self.get_frame();
+        self._last_photo = self.get_frame();
 
     def get_last_photo(self, scale_to = None):
-        return self.__scale_img(self.__last_photo, scale_to);
+        return self._scale_img(self._last_photo, scale_to);
 
-    def __scale_img(self, original, scale_to):
+    def _scale_img(self, original, scale_to):
         if(scale_to is None):
             return original;
 

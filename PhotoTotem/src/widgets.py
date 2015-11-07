@@ -75,18 +75,18 @@ class Button(Sprite):
         Sprite.__init__(self);
 
         ## iVars #
-        self.__normal_surface  = None;
-        self.__pressed_surface = None;
+        self._normal_surface  = None;
+        self._pressed_surface = None;
 
-        self.__click_callback = None;
+        self._click_callback = None;
 
 
     ############################################################################
     ## Set Image Methods                                                      ##
     ############################################################################
     def load_images(self, normal_filename, pressed_filename):
-        self.__normal_surface  = pygame.image.load(normal_filename);
-        self.__pressed_surface = pygame.image.load(pressed_filename);
+        self._normal_surface  = pygame.image.load(normal_filename);
+        self._pressed_surface = pygame.image.load(pressed_filename);
 
         self.reset();
 
@@ -95,47 +95,47 @@ class Button(Sprite):
     ## Callback Methods                                                       ##
     ############################################################################
     def set_click_callback(self, callback):
-        self.__click_callback = callback;
+        self._click_callback = callback;
 
 
     ############################################################################
     ## State Methods                                                          ##
     ############################################################################
     def reset(self):
-        self.__set_normal_state();
+        self._set_normal_state();
 
-    def __set_pressed_state(self):
-        self.update_image(self.__pressed_surface);
+    def _set_pressed_state(self):
+        self.update_image(self._pressed_surface);
 
-    def __set_normal_state(self):
-        self.update_image(self.__normal_surface);
+    def _set_normal_state(self):
+        self.update_image(self._normal_surface);
 
 
     def handle_events(self, event):
         #Check which type of event and pass to handler.
         if(event.type == pygame.locals.MOUSEBUTTONDOWN):
-            self.__onMouseButtonDown();
+            self._onMouseButtonDown();
         elif(event.type == pygame.locals.MOUSEBUTTONUP):
-            self.__onMouseButtonUp();
+            self._onMouseButtonUp();
 
 
     ############################################################################
     ## Mouse Events                                                           ##
     ############################################################################
-    def __onMouseButtonDown(self):
+    def _onMouseButtonDown(self):
         #User touch the screen, check if the touch point
         #is inside of the Button bounding box and set
         #the state to pressed if is.
         pos = pygame.mouse.get_pos();
         if(self.rect.collidepoint(pos)):
-            self.__set_pressed_state();
+            self._set_pressed_state();
 
-    def __onMouseButtonUp(self):
+    def _onMouseButtonUp(self):
         #Button untouch the screen, set the state to normal
         #and check if the touch point was inside the button
         #bouding box. If was set that button was pressed.
         self.reset();
 
         pos = pygame.mouse.get_pos();
-        if(self.rect.collidepoint(pos) and self.__click_callback is not None):
-            self.__click_callback();
+        if(self.rect.collidepoint(pos) and self._click_callback is not None):
+            self._click_callback();

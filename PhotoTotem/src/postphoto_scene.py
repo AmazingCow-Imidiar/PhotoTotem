@@ -43,25 +43,25 @@ class PostPhotoScene(BaseScene):
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
-    __REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE = "photo_placeholder";
-    __REQUIRED_KEY_PHOTO_FRAME_SPRITE       = "photo_frame";
-    __REQUIRED_KEY_ACCEPT_BUTTON            = "accept_button";
-    __REQUIRED_KEY_REJECT_BUTTON            = "reject_button";
-    __REQUIRED_KEY_STATIC_SPRITES           = "static_sprites";
+    _REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE = "photo_placeholder";
+    _REQUIRED_KEY_PHOTO_FRAME_SPRITE       = "photo_frame";
+    _REQUIRED_KEY_ACCEPT_BUTTON            = "accept_button";
+    _REQUIRED_KEY_REJECT_BUTTON            = "reject_button";
+    _REQUIRED_KEY_STATIC_SPRITES           = "static_sprites";
 
-    __REQUIRED_KEYS = [
-        __REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE,
-        __REQUIRED_KEY_PHOTO_FRAME_SPRITE,
-        __REQUIRED_KEY_ACCEPT_BUTTON,
-        __REQUIRED_KEY_REJECT_BUTTON,
-        __REQUIRED_KEY_STATIC_SPRITES,
+    _REQUIRED_KEYS = [
+        _REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE,
+        _REQUIRED_KEY_PHOTO_FRAME_SPRITE,
+        _REQUIRED_KEY_ACCEPT_BUTTON,
+        _REQUIRED_KEY_REJECT_BUTTON,
+        _REQUIRED_KEY_STATIC_SPRITES,
     ];
 
     #Layers.
-    __LAYER_INDEX_STATIC_SPRITE = 1;
-    __LAYER_INDEX_CAMERA_SPRITE = 2;
-    __LAYER_INDEX_FRAME_SPRITE  = 3;
-    __LAYER_INDEX_BUTTONS       = 4;
+    _LAYER_INDEX_STATIC_SPRITE = 1;
+    _LAYER_INDEX_CAMERA_SPRITE = 2;
+    _LAYER_INDEX_FRAME_SPRITE  = 3;
+    _LAYER_INDEX_BUTTONS       = 4;
 
 
     ############################################################################
@@ -72,14 +72,14 @@ class PostPhotoScene(BaseScene):
 
         ## iVars ##
         #Filenames and Content.
-        self.__config_filename = None;
-        self.__file_contents   = None;
+        self._config_filename = None;
+        self._file_contents   = None;
 
         #UI Elements.
-        self.__accept_button = None;
-        self.__reject_button = None;
-        self.__photo_sprite  = None;
-        self.__frame_sprite  = None;
+        self._accept_button = None;
+        self._reject_button = None;
+        self._photo_sprite  = None;
+        self._frame_sprite  = None;
 
 
     ############################################################################
@@ -89,9 +89,9 @@ class PostPhotoScene(BaseScene):
         Logger.instance().log_debug("PostPhotoScene.start");
 
         #Update the placeholder image to the last photo taken by camera.
-        placeholder_size = self.__photo_sprite.get_size();
+        placeholder_size = self._photo_sprite.get_size();
         last_photo = Camera.instance().get_last_photo(scale_to = placeholder_size);
-        self.__photo_sprite.update_image(last_photo);
+        self._photo_sprite.update_image(last_photo);
 
     def end(self):
         Logger.instance().log_debug("PostPhotoScene.end");
@@ -102,21 +102,21 @@ class PostPhotoScene(BaseScene):
     ############################################################################
     def init(self):
         Logger.instance().log_debug("PostPhotoScene.init");
-        self.__config_filename = scene_manager.SceneManager.instance().get_postphoto_scene_filename();
+        self._config_filename = scene_manager.SceneManager.instance().get_postphoto_scene_filename();
 
         #Validate the configuration.
-        self.__file_contents = config_validation.validate("PostPhotoScene",
-                                                          self.__config_filename,
-                                                          PostPhotoScene.__REQUIRED_KEYS);
+        self._file_contents = config_validation.validate("PostPhotoScene",
+                                                          self._config_filename,
+                                                          PostPhotoScene._REQUIRED_KEYS);
         #Init the UI.
-        self.__init_static_sprites();
-        self.__init_photo_sprite();
-        self.__init_frame_sprite();
-        self.__init_buttons();
+        self._init_static_sprites();
+        self._init_photo_sprite();
+        self._init_frame_sprite();
+        self._init_buttons();
 
 
-    def __init_static_sprites(self):
-        sprite_list = self.__file_contents[PostPhotoScene.__REQUIRED_KEY_STATIC_SPRITES];
+    def _init_static_sprites(self):
+        sprite_list = self._file_contents[PostPhotoScene._REQUIRED_KEY_STATIC_SPRITES];
         for info in sprite_list:
             #Create the sprite.
             sprite = Sprite();
@@ -126,104 +126,104 @@ class PostPhotoScene(BaseScene):
             sprite.set_position(info["position"]);
 
             #Add to scene.
-            self.add(sprite, layer = PostPhotoScene.__LAYER_INDEX_STATIC_SPRITE);
+            self.add(sprite, layer = PostPhotoScene._LAYER_INDEX_STATIC_SPRITE);
 
 
-    def __init_photo_sprite(self):
+    def _init_photo_sprite(self):
         #Get the info.
-        info = self.__file_contents[PostPhotoScene.__REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE];
+        info = self._file_contents[PostPhotoScene._REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE];
 
         #Create the sprite.
-        self.__photo_sprite = Sprite();
+        self._photo_sprite = Sprite();
 
         #Set the sprite properties.
-        self.__photo_sprite.load_image(info["image"]);
-        self.__photo_sprite.set_position(info["position"]);
+        self._photo_sprite.load_image(info["image"]);
+        self._photo_sprite.set_position(info["position"]);
 
         #Add to scene.
-        self.add(self.__photo_sprite,
-                 layer = PostPhotoScene.__LAYER_INDEX_CAMERA_SPRITE);
+        self.add(self._photo_sprite,
+                 layer = PostPhotoScene._LAYER_INDEX_CAMERA_SPRITE);
 
 
-    def __init_frame_sprite(self):
+    def _init_frame_sprite(self):
         #Get the info.
-        info = self.__file_contents[PostPhotoScene.__REQUIRED_KEY_PHOTO_FRAME_SPRITE];
+        info = self._file_contents[PostPhotoScene._REQUIRED_KEY_PHOTO_FRAME_SPRITE];
 
         #Don't need the frame...
         if(info == False):
             return;
 
         #Init the sprite.
-        self.__frame_sprite = Sprite();
+        self._frame_sprite = Sprite();
 
         #Set the sprite properties.
-        self.__frame_sprite.load_image(info["image"]);
-        self.__frame_sprite.set_position(info["position"]);
+        self._frame_sprite.load_image(info["image"]);
+        self._frame_sprite.set_position(info["position"]);
 
         #Frame isn't same size of camera image, so scale it.
-        photo_sprite_size = self.__photo_sprite.get_size();
-        if(self.__frame_sprite.get_size() != photo_sprite_size):
-            frame_image  = self.__frame_sprite.image;
+        photo_sprite_size = self._photo_sprite.get_size();
+        if(self._frame_sprite.get_size() != photo_sprite_size):
+            frame_image  = self._frame_sprite.image;
             scaled_image = pygame.transform.scale(frame_image,
                                                   photo_sprite_size);
 
-            self.__frame_sprite.update_image(scaled_image);
+            self._frame_sprite.update_image(scaled_image);
 
         #Add to scene.
-        self.add(self.__frame_sprite,
-                 layer = PostPhotoScene.__LAYER_INDEX_FRAME_SPRITE);
+        self.add(self._frame_sprite,
+                 layer = PostPhotoScene._LAYER_INDEX_FRAME_SPRITE);
 
 
-    def __init_buttons(self):
+    def _init_buttons(self):
         #Initialize the buttons.
-        self.__accept_button = Button();
-        self.__reject_button = Button();
+        self._accept_button = Button();
+        self._reject_button = Button();
 
         #Get the info.
-        accept_info = self.__file_contents[PostPhotoScene.__REQUIRED_KEY_ACCEPT_BUTTON];
-        reject_info = self.__file_contents[PostPhotoScene.__REQUIRED_KEY_REJECT_BUTTON];
+        accept_info = self._file_contents[PostPhotoScene._REQUIRED_KEY_ACCEPT_BUTTON];
+        reject_info = self._file_contents[PostPhotoScene._REQUIRED_KEY_REJECT_BUTTON];
 
         #Set the Accept Button properties.
-        self.__accept_button.load_images(accept_info["normal_image"],
+        self._accept_button.load_images(accept_info["normal_image"],
                                          accept_info["pressed_image"]);
 
-        self.__accept_button.set_position(accept_info["position"]);
+        self._accept_button.set_position(accept_info["position"]);
 
-        self.__accept_button.set_click_callback(self.__on_accept_button_pressed);
+        self._accept_button.set_click_callback(self._on_accept_button_pressed);
 
 
         #Set the Reject Button properties.
-        self.__reject_button.load_images(reject_info["normal_image"],
+        self._reject_button.load_images(reject_info["normal_image"],
                                          reject_info["pressed_image"]);
 
-        self.__reject_button.set_position(reject_info["position"]);
+        self._reject_button.set_position(reject_info["position"]);
 
-        self.__reject_button.set_click_callback(self.__on_reject_button_pressed);
+        self._reject_button.set_click_callback(self._on_reject_button_pressed);
 
         #Add them to scene.
-        self.add(self.__accept_button,
-                 layer = PostPhotoScene.__LAYER_INDEX_BUTTONS);
-        self.add(self.__reject_button,
-                 layer = PostPhotoScene.__LAYER_INDEX_BUTTONS);
+        self.add(self._accept_button,
+                 layer = PostPhotoScene._LAYER_INDEX_BUTTONS);
+        self.add(self._reject_button,
+                 layer = PostPhotoScene._LAYER_INDEX_BUTTONS);
 
 
     ############################################################################
     ## Update / Draw / Handle Events                                          ##
     ############################################################################
     def handle_events(self, event):
-        self.__accept_button.handle_events(event);
-        self.__reject_button.handle_events(event);
+        self._accept_button.handle_events(event);
+        self._reject_button.handle_events(event);
 
 
     ############################################################################
     ## Button Callbacks                                                       ##
     ############################################################################
-    def __on_accept_button_pressed(self):
+    def _on_accept_button_pressed(self):
         #Save the photo on disk...
         filesystem.save_photo(Camera.instance().get_last_photo(),
                               use_another_thread = True);
         #Change to other scene.
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=False);
 
-    def __on_reject_button_pressed(self):
+    def _on_reject_button_pressed(self):
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=True);

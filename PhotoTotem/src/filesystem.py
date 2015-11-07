@@ -59,14 +59,14 @@ def save_photo(image_to_save, use_another_thread = True):
     #Two of save... Fist one is in the main thread, blocking the UI.
     #The another one is saving in background...
     if(use_another_thread):
-        p = Process(target = __save,
+        p = Process(target = _save,
                     args   = (image_to_save, fullpath));
         p.start();
     else:
-        __save(image_to_save, fullpath);
+        _save(image_to_save, fullpath);
 
 ################################################################################
 ## Helper Methods                                                             ##
 ################################################################################
-def __save(img, fullpath):
+def _save(img, fullpath):
     pygame.image.save(img, fullpath);

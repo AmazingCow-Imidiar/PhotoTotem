@@ -133,7 +133,9 @@ class SceneManager(object):
         self._app_fps   = SceneManager._APP_FPS;
 
         #Init the Window.
-        self._screen_surface = pygame.display.set_mode(self.get_window_size());
+        #COWTODO: Check if the fullscreen is a good option.
+        flags = pygame.DOUBLEBUF | pygame.HWSURFACE# | pygame.FULLSCREEN;
+        self._screen_surface = pygame.display.set_mode(self.get_window_size(), flags);
         self._screen_surface.fill((0,0,0));
 
 
@@ -145,7 +147,7 @@ class SceneManager(object):
 
         #Set the app to running and start the clock.
         self._app_running = True;
-        dt = self._app_clock.tick(self._app_fps);
+        dt = self._app_clock.tick_busy_loop();
 
         #Start the FPS Counter.
         self._fps_timer = BasicClock(1000, self._on_fps_timer_tick);
@@ -182,8 +184,8 @@ class SceneManager(object):
 
 
     def _draw(self):
-        self._scene_current.draw(self._screen_surface);
-        pygame.display.update();
+        dirty_rects = self._scene_current.draw(self._screen_surface);
+        pygame.display.update(dirty_rects);
 
 
     ############################################################################

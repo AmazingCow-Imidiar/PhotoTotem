@@ -72,10 +72,17 @@ class Logger(object):
         exit(1);
 
     def __log(self, *msg):
+        #Build the message.
         msg = time.ctime() + " -- " + " ".join(map(str, msg));
+
+        #Save to the log file.
         echo_cmd = "echo {} >> {}".format(self.__escape_msg(msg),
                                           Logger.__LOG_FILE_FILENAME);
         self.__system_cmd(echo_cmd);
+
+        #Print to screen.
+        print msg;
+
 
 
     ############################################################################

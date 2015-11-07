@@ -23,6 +23,7 @@
 #Python
 import os;
 import json;
+import pdb;
 #Pygame
 import pygame;
 #Project
@@ -129,8 +130,10 @@ class CameraScene(BaseScene):
             sprite.load_image(info["image"]);
             sprite.set_position(info["position"]);
 
+            self._background_sprite = sprite;
             #Add to scene.
             self.add(sprite, layer = CameraScene._LAYER_INDEX_STATIC_SPRITE);
+
 
 
     def _init_camera_sprite(self):

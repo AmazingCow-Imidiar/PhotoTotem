@@ -182,7 +182,6 @@ class SceneManager(object):
 
 
     def _draw(self):
-        self._screen_surface.fill((0,0,0));
         self._scene_current.draw(self._screen_surface);
         pygame.display.update();
 

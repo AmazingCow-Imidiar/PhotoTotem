@@ -1,5 +1,6 @@
 {
-    "window_size"              : [1050, 1680],
+    "window_size2"              : [1050, 1680],
+    "window_size"              : [1360, 768],
 
     "scene_camera_filename"    : "../config/prod/scene_camera_config.json",
     "scene_postphoto_filename" : "../config/prod/scene_postphoto_config.json",

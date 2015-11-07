@@ -41,7 +41,7 @@ class Sprite(pygame.sprite.Sprite):
     ## Image Methods                                                          ##
     ############################################################################
     def load_image(self, filename):
-        surface = pygame.image.load(filename);
+        surface = pygame.image.load(filename).convert_alpha();
         self.update_image(surface);
 
     def update_image(self, surface):

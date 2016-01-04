@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    camera.py                                   ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -108,24 +108,31 @@ class Camera(object):
 
             #If we are using the dummy camera, init the it's font and image.
             if(Config.instance().get_dummy_camera()):
-                #Font.
-                font_path = filesystem.canonical_path("./private_resources/dummy_camera_font.ttf");
-                self._dummy_camera_font = pygame.font.Font(font_path, 50);
-                #Image.
-                image_path = filesystem.canonical_path("./private_resources/dummy_camera_image.png");
-                self._dummy_camera_image = pygame.image.load(image_path);
+                self._init_dummy_camera();
+
             #Otherwise initialize the real camera.
             else:
-                pygame.camera.init();
-                # #Initialize the camera.
-                self._camera = pygame.camera.Camera(self._device,
-                                                     self._resolution);
-                self._camera.start();
-                self._camera_surface = self._camera.get_image();
+                self._init_real_camera();
 
         #All errors here are fatal.
         except Exception, e:
             Logger.instance().log_fatal("Camera - {}".format(e));
+
+    def _init_dummy_camera(self):
+        #Font.
+        font_path = filesystem.canonical_path("./private_resources/dummy_camera_font.ttf");
+        self._dummy_camera_font = pygame.font.Font(font_path, 50);
+        #Image.
+        image_path = filesystem.canonical_path("./private_resources/dummy_camera_image.png");
+        self._dummy_camera_image = pygame.image.load(image_path);
+
+    def _init_real_camera(self):
+        pygame.camera.init();
+        # #Initialize the camera.
+        self._camera = pygame.camera.Camera(self._device,
+                                             self._resolution);
+        self._camera.start();
+        self._camera_surface = self._camera.get_image();
 
 
     ############################################################################

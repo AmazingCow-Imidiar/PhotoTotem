@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    base_scene.py                               ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -39,6 +39,7 @@ class BaseScene(pygame.sprite.LayeredUpdates):
     ############################################################################
     def start(self):
         assert "override me";
+
     def end(self):
         assert "override me";
 

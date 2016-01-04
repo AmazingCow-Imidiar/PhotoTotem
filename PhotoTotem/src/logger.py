@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    logger.py                                   ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -38,7 +38,8 @@ class Logger(object):
                 "RuntimeLog-{}.txt".format(time.ctime()).replace(" ", "_")
     );
 
-   ############################################################################
+
+    ############################################################################
     ## Singleton                                                              ##
     ############################################################################
     _instance = None;
@@ -48,6 +49,7 @@ class Logger(object):
             Logger._instance = Logger();
 
         return Logger._instance;
+
 
     ############################################################################
     ## CTOR                                                                   ##
@@ -82,7 +84,6 @@ class Logger(object):
 
         #Print to screen.
         print msg;
-
 
 
     ############################################################################

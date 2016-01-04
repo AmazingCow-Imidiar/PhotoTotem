@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    done_scene.py                               ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -65,7 +65,7 @@ class DoneScene(BaseScene):
 
         #Scene timer.
         self._scene_timer = BasicClock(DoneScene._SCENE_TIMER_TIME,
-                                        self._on_scene_timer_tick);
+                                       self._on_scene_timer_tick);
 
 
     ############################################################################
@@ -90,8 +90,8 @@ class DoneScene(BaseScene):
 
         #Validate the configuration.
         self._file_contents = config_validation.validate("DoneScene",
-                                                          self._config_filename,
-                                                          DoneScene._REQUIRED_KEYS);
+                                                         self._config_filename,
+                                                         DoneScene._REQUIRED_KEYS);
         #Init the UI.
         self._init_static_sprites();
 
@@ -103,7 +103,7 @@ class DoneScene(BaseScene):
             sprite = Sprite();
 
             #Set the sprite properties.
-            sprite.load_image(info["image"]);
+            sprite.load_image  (info["image"   ]);
             sprite.set_position(info["position"]);
 
             #Add to scene.

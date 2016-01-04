@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    base_scene.py                               ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -33,9 +33,12 @@ class Sprite(pygame.sprite.Sprite):
     ############################################################################
     def __init__(self, surface = None):
         pygame.sprite.Sprite.__init__(self);
+
         self.rect = pygame.rect.Rect(0,0,0,0);
+
         if(surface is not None):
             self.update_image(surface);
+
 
     ############################################################################
     ## Image Methods                                                          ##
@@ -49,6 +52,7 @@ class Sprite(pygame.sprite.Sprite):
         self.rect[2] = self.image.get_width();
         self.rect[3] = self.image.get_height();
 
+
     ############################################################################
     ## Positions Setter/Getters                                               ##
     ############################################################################
@@ -58,6 +62,7 @@ class Sprite(pygame.sprite.Sprite):
 
     def get_position(self):
         return self.rect[0], self.rect[1];
+
 
     ############################################################################
     ## Size Setter/Getters                                                    ##

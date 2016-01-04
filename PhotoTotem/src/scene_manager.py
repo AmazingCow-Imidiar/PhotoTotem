@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    scene_manager.py                            ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 -  AmazingCow      ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -120,6 +120,7 @@ class SceneManager(object):
 
         #Initialize the Scenes.
         self._change_scene(self._get_scene_camera_instance());
+
 
     def _init_pygame(self):
         #Init pygame.

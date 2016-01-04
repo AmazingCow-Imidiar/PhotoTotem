@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    camera_scene.py                             ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -85,8 +85,8 @@ class CameraScene(BaseScene):
         self._take_photo_button = None;
 
         #Countdown clock.
-        self._countdown_clock  = BasicClock(CameraScene._COUNTDOWN_CLOCK_TIME,
-                                             self._on_countdown_timer_tick);
+        self._countdown_clock = BasicClock(CameraScene._COUNTDOWN_CLOCK_TIME,
+                                           self._on_countdown_timer_tick);
 
         self._camera_sprite_size = None;
 
@@ -127,14 +127,12 @@ class CameraScene(BaseScene):
             sprite = Sprite();
 
             #Set the sprite properties.
-            sprite.load_image(info["image"]);
+            sprite.load_image  (info["image"   ]);
             sprite.set_position(info["position"]);
 
             self._background_sprite = sprite;
             #Add to scene.
             self.add(sprite, layer = CameraScene._LAYER_INDEX_STATIC_SPRITE);
-
-
 
     def _init_camera_sprite(self):
         #Initialize the sprite.
@@ -144,7 +142,7 @@ class CameraScene(BaseScene):
         info = self._file_contents[CameraScene._REQUIRED_KEY_CAMERA_PLACEHOLDER_SPRITE];
 
         #Set the sprite properties.
-        self._camera_sprite.load_image(info["image"]);
+        self._camera_sprite.load_image  (info["image"   ]);
         self._camera_sprite.set_position(info["position"]);
 
         #Add to scene.
@@ -181,7 +179,6 @@ class CameraScene(BaseScene):
         self.add(self._frame_sprite,
                  layer = CameraScene._LAYER_INDEX_FRAME_SPRITE);
 
-
     def _init_buttons(self):
         #Initialize the button.
         self._take_photo_button = Button();
@@ -191,7 +188,7 @@ class CameraScene(BaseScene):
 
         #Set the button properties.
         self._take_photo_button.load_images(info["normal_image"],
-                                             info["pressed_image"]);
+                                            info["pressed_image"]);
 
         self._take_photo_button.set_position(info["position"]);
 
@@ -200,7 +197,6 @@ class CameraScene(BaseScene):
         #Add to scene.
         self.add(self._take_photo_button,
                  layer = CameraScene._LAYER_INDEX_PHOTO_BUTTON);
-
 
     def _init_countdown_sprite(self):
         #Initialize the Sprite.

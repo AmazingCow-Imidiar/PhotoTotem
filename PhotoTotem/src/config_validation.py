@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    config_validation.py                        ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -42,7 +42,7 @@ def validate(name, filename, required_keys):
     #Not a valid file path.
     if(not os.path.isfile(filename)):
         msg = _build_str(name, "Configuration filename is invalid.",
-                          "Filename: ({})".format(filename));
+                         "Filename: ({})".format(filename));
         Logger.instance().log_fatal(msg);
 
     #Check if is a valid json.

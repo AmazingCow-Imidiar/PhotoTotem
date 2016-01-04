@@ -6,7 +6,7 @@
 ##              ███  █  █  ███    postphoto_scene.py                          ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015 AmazingCow               ##
+##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -128,7 +128,6 @@ class PostPhotoScene(BaseScene):
             #Add to scene.
             self.add(sprite, layer = PostPhotoScene._LAYER_INDEX_STATIC_SPRITE);
 
-
     def _init_photo_sprite(self):
         #Get the info.
         info = self._file_contents[PostPhotoScene._REQUIRED_KEY_PHOTO_PLACEHOLDER_SPRITE];
@@ -143,7 +142,6 @@ class PostPhotoScene(BaseScene):
         #Add to scene.
         self.add(self._photo_sprite,
                  layer = PostPhotoScene._LAYER_INDEX_CAMERA_SPRITE);
-
 
     def _init_frame_sprite(self):
         #Get the info.
@@ -172,7 +170,6 @@ class PostPhotoScene(BaseScene):
         #Add to scene.
         self.add(self._frame_sprite,
                  layer = PostPhotoScene._LAYER_INDEX_FRAME_SPRITE);
-
 
     def _init_buttons(self):
         #Initialize the buttons.

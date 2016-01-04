@@ -1,1 +1,2 @@
-v1.0 - Finish up the basic implementation.
+v1.0.00 - Finish up the basic implementation.
+v1.0.01 - Remove the old (unneeded files).

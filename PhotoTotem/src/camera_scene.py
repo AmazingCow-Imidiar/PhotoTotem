@@ -36,24 +36,39 @@ from   widgets    import Sprite;
 from   widgets    import Button;
 from   clock      import BasicClock;
 
+class DictHelper:
+    def __init__(self, d):
+        self._d = d;
+
+    def value_or_none(self, key):
+        if(key in self._d.keys()):
+            return self._d[key];
+        return None;
+
+    def value_or_die(self, key):
+        if(key in self._d.keys()):
+            return self._d[key];
+
+        print "deu merda";
+        exit(0);
 
 class CameraScene(BaseScene):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
-    _REQUIRED_KEY_CAMERA_PLACEHOLDER_SPRITE = "camera_placeholder";
-    _REQUIRED_KEY_CAMERA_FRAME_SPRITE       = "camera_frame";
-    _REQUIRED_KEY_TAKEPHOTO_BUTTON          = "take_photo";
-    _REQUIRED_KEY_STATIC_SPRITES            = "static_sprites";
-    _REQUIRED_KEY_COUNTDOWN_SPRITES         = "countdown";
+    _KEY_CAMERA_PLACEHOLDER_SPRITE = "camera_placeholder";
+    _KEY_CAMERA_FRAME_SPRITE       = "camera_frame";
+    _KEY_TAKEPHOTO_BUTTON          = "take_photo";
+    _KEY_STATIC_SPRITES            = "static_sprites";
+    _KEY_COUNTDOWN_SPRITES         = "countdown";
 
     _REQUIRED_KEYS = [
-        _REQUIRED_KEY_CAMERA_PLACEHOLDER_SPRITE,
-        _REQUIRED_KEY_CAMERA_FRAME_SPRITE,
-        _REQUIRED_KEY_TAKEPHOTO_BUTTON,
-        _REQUIRED_KEY_STATIC_SPRITES,
-        _REQUIRED_KEY_COUNTDOWN_SPRITES,
+        _KEY_CAMERA_PLACEHOLDER_SPRITE,
+        _KEY_CAMERA_FRAME_SPRITE,
+        _KEY_TAKEPHOTO_BUTTON,
+        _KEY_STATIC_SPRITES,
+        _KEY_COUNTDOWN_SPRITES,
     ];
 
     #How much time each countdown step will take (in ms).
@@ -76,7 +91,7 @@ class CameraScene(BaseScene):
         ## iVars ##
         #Filenames and Content.
         self._config_filename = None;
-        self._file_contents   = None;
+        self._config_contents = None;
 
         #UI Elements.
         self._countdown_sprite  = None;
@@ -109,9 +124,12 @@ class CameraScene(BaseScene):
         self._config_filename = scene_manager.SceneManager.instance().get_camera_scene_filename();
 
         #Validate the configuration.
-        self._file_contents = config_validation.validate("CameraScene",
-                                                          self._config_filename,
-                                                          CameraScene._REQUIRED_KEYS);
+        config_dict = config_validation.validate("CameraScene",
+                                                 self._config_filename,
+                                                 CameraScene._REQUIRED_KEYS);
+        self._config_contents = DictHelper(config_dict);
+
+
         #Init the UI.
         self._init_static_sprites();
         self._init_camera_sprite();
@@ -121,7 +139,7 @@ class CameraScene(BaseScene):
 
 
     def _init_static_sprites(self):
-        sprite_list = self._file_contents[CameraScene._REQUIRED_KEY_STATIC_SPRITES];
+        sprite_list = self._config_contents.value_or_die(CameraScene._KEY_STATIC_SPRITES);
         for info in sprite_list:
             #Create the sprite.
             sprite = Sprite();
@@ -139,7 +157,7 @@ class CameraScene(BaseScene):
         self._camera_sprite = Sprite();
 
         #Get the info.
-        info = self._file_contents[CameraScene._REQUIRED_KEY_CAMERA_PLACEHOLDER_SPRITE];
+        info = self._config_contents.value_or_die(CameraScene._KEY_CAMERA_PLACEHOLDER_SPRITE);
 
         #Set the sprite properties.
         self._camera_sprite.load_image  (info["image"   ]);
@@ -153,7 +171,7 @@ class CameraScene(BaseScene):
 
     def _init_frame_sprite(self):
         #Get the info.
-        info = self._file_contents[CameraScene._REQUIRED_KEY_CAMERA_FRAME_SPRITE];
+        info = self._config_contents.value_or_die(CameraScene._KEY_CAMERA_FRAME_SPRITE);
 
         #Don't need the frame...
         if(info == False):
@@ -184,7 +202,7 @@ class CameraScene(BaseScene):
         self._take_photo_button = Button();
 
         #Get the info.
-        info = self._file_contents[CameraScene._REQUIRED_KEY_TAKEPHOTO_BUTTON];
+        info = self._config_contents.value_or_die(CameraScene._KEY_TAKEPHOTO_BUTTON);
 
         #Set the button properties.
         self._take_photo_button.load_images(info["normal_image"],
@@ -203,7 +221,7 @@ class CameraScene(BaseScene):
         self._countdown_sprite = Sprite();
 
         #Get the info.
-        info = self._file_contents[CameraScene._REQUIRED_KEY_COUNTDOWN_SPRITES];
+        info = self._config_contents.value_or_die(CameraScene._KEY_COUNTDOWN_SPRITES);
 
         #Set the sprite properties.
         self._countdown_sprite.set_position(info["position"]);
@@ -242,7 +260,7 @@ class CameraScene(BaseScene):
     ############################################################################
     def _on_countdown_timer_tick(self):
         #Get the info.
-        info = self._file_contents[CameraScene._REQUIRED_KEY_COUNTDOWN_SPRITES];
+        info = self._config_contents.value_or_die(CameraScene._KEY_COUNTDOWN_SPRITES);
 
         sprites_list = info["sprites"];
         index        = self._countdown_clock.get_ticks_count();

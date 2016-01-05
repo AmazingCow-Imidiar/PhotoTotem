@@ -172,37 +172,33 @@ class PostPhotoScene(BaseScene):
                  layer = PostPhotoScene._LAYER_INDEX_FRAME_SPRITE);
 
     def _init_buttons(self):
-        #Initialize the buttons.
-        self._accept_button = Button();
-        self._reject_button = Button();
-
-        #Get the info.
+        #Get the infos.
         accept_info = self._file_contents[PostPhotoScene._REQUIRED_KEY_ACCEPT_BUTTON];
         reject_info = self._file_contents[PostPhotoScene._REQUIRED_KEY_REJECT_BUTTON];
+        # print_info  = self._file_contents[PostPhotoScene._REQUIRED_KEY_PRINT_BUTTON];
 
-        #Set the Accept Button properties.
-        self._accept_button.load_images(accept_info["normal_image"],
-                                         accept_info["pressed_image"]);
+        #Initialize the buttons.
+        self._accept_button = self._create_button_helper(accept_info,
+                                                         self._on_accept_button_pressed);
 
-        self._accept_button.set_position(accept_info["position"]);
+        self._reject_button = self._create_button_helper(reject_info,
+                                                         self._on_reject_button_pressed);
 
-        self._accept_button.set_click_callback(self._on_accept_button_pressed);
+    def _create_button_helper(self, info, callback):
+        button = Button();
 
+        #Images.
+        button.load_images(info["normal_image"],
+                           info["pressed_image"]);
+        #Position.
+        button.set_position(info["position"]);
+        #Callback.
+        button.set_click_callback(callback);
 
-        #Set the Reject Button properties.
-        self._reject_button.load_images(reject_info["normal_image"],
-                                         reject_info["pressed_image"]);
+        #Add to scene.
+        self.add(button, layer = PostPhotoScene._LAYER_INDEX_BUTTONS);
 
-        self._reject_button.set_position(reject_info["position"]);
-
-        self._reject_button.set_click_callback(self._on_reject_button_pressed);
-
-        #Add them to scene.
-        self.add(self._accept_button,
-                 layer = PostPhotoScene._LAYER_INDEX_BUTTONS);
-        self.add(self._reject_button,
-                 layer = PostPhotoScene._LAYER_INDEX_BUTTONS);
-
+        return button;
 
     ############################################################################
     ## Update / Draw / Handle Events                                          ##

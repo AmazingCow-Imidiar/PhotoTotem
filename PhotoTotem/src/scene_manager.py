@@ -135,8 +135,7 @@ class SceneManager(object):
         self._app_fps   = SceneManager._APP_FPS;
 
         #Init the Window.
-        #COWTODO: Check if the fullscreen is a good option.
-        flags = pygame.DOUBLEBUF | pygame.HWSURFACE# | pygame.FULLSCREEN;
+        flags = pygame.DOUBLEBUF | pygame.HWSURFACE;
         self._screen_surface = pygame.display.set_mode(self.get_window_size(), flags);
         self._screen_surface.fill((0,0,0));
 

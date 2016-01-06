@@ -175,6 +175,10 @@ class PostPhotoScene(BaseScene):
         #Get the infos.
         accept_info = self._file_contents[PostPhotoScene._REQUIRED_KEY_ACCEPT_BUTTON];
         reject_info = self._file_contents[PostPhotoScene._REQUIRED_KEY_REJECT_BUTTON];
+
+        if(PostPhotoScene._REQUIRED_KEY_REJECT_BUTTON in self._file_contents.keys()):
+            print "OK";
+
         # print_info  = self._file_contents[PostPhotoScene._REQUIRED_KEY_PRINT_BUTTON];
 
         #Initialize the buttons.

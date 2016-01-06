@@ -37,7 +37,6 @@ from   postphoto_scene import PostPhotoScene;
 from   done_scene      import DoneScene;
 
 
-
 class SceneManager(object):
     ############################################################################
     ## Constants                                                              ##

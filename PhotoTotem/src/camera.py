@@ -47,6 +47,7 @@ class Camera(object):
         _REQUIRED_KEY_DEVICE,
     ];
 
+
     ############################################################################
     ## Singleton                                                              ##
     ############################################################################
@@ -166,8 +167,8 @@ class Camera(object):
             time_label = str(time.time());
             font_surface = self._dummy_camera_font.render(time_label,
                                                            True,
-                                                           (0,   0,  0),  #Black
-                                                           (255, 0,255)); #Magenta
+                                                           (0,   0,   0),  #Black
+                                                           (255, 0, 255)); #Magenta
             img = self._dummy_camera_image.copy();
             img.blit(font_surface, (10, 10));
 
@@ -178,7 +179,6 @@ class Camera(object):
             #otherwise we just return the old Frame.
             if(self._camera.query_image()):
                 img = self._camera.get_image(self._camera_surface);
-
 
         return self._scale_img(img, scale_to);
 

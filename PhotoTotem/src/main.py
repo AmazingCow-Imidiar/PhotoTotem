@@ -26,6 +26,7 @@ from camera        import Camera;
 from logger        import Logger;
 from scene_manager import SceneManager;
 
+
 ################################################################################
 ## Script Initialization                                                      ##
 ################################################################################

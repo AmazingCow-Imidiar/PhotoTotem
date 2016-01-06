@@ -29,28 +29,14 @@ import pygame;
 #Project
 import scene_manager;
 import config_validation;
-from   logger     import Logger;
-from   camera     import Camera;
-from   base_scene import BaseScene;
-from   widgets    import Sprite;
-from   widgets    import Button;
-from   clock      import BasicClock;
+from   logger      import Logger;
+from   camera      import Camera;
+from   base_scene  import BaseScene;
+from   widgets     import Sprite;
+from   widgets     import Button;
+from   clock       import BasicClock;
+from   dict_helper import DictHelper;
 
-class DictHelper:
-    def __init__(self, d):
-        self._d = d;
-
-    def value_or_none(self, key):
-        if(key in self._d.keys()):
-            return self._d[key];
-        return None;
-
-    def value_or_die(self, key):
-        if(key in self._d.keys()):
-            return self._d[key];
-
-        print "deu merda";
-        exit(0);
 
 class CameraScene(BaseScene):
     ############################################################################

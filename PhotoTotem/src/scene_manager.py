@@ -35,28 +35,28 @@ from   clock           import BasicClock;
 from   camera_scene    import CameraScene;
 from   postphoto_scene import PostPhotoScene;
 from   done_scene      import DoneScene;
-
+from   dict_helper     import DictHelper;
 
 class SceneManager(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
     #Window Properties.
-    _REQUIRED_KEY_WINDOW_SIZE = "window_size";
+    _KEY_WINDOW_SIZE = "window_size";
 
     #Scenes Filenames.
-    _REQUIRED_KEY_SCENE_CAMERA_FILENAME    = "scene_camera_filename";
-    _REQUIRED_KEY_SCENE_POSTPHOTO_FILENAME = "scene_postphoto_filename";
-    _REQUIRED_KEY_SCENE_FILTER_FILENAME    = "scene_filter_filename";
-    _REQUIRED_KEY_SCENE_DONE_FILENAME      = "scene_done_filename";
+    _KEY_SCENE_CAMERA_FILENAME    = "scene_camera_filename";
+    _KEY_SCENE_POSTPHOTO_FILENAME = "scene_postphoto_filename";
+    _KEY_SCENE_FILTER_FILENAME    = "scene_filter_filename";
+    _KEY_SCENE_DONE_FILENAME      = "scene_done_filename";
 
     _REQUIRED_KEYS = [
-        _REQUIRED_KEY_WINDOW_SIZE,
+        _KEY_WINDOW_SIZE,
 
-        _REQUIRED_KEY_SCENE_CAMERA_FILENAME,
-        _REQUIRED_KEY_SCENE_POSTPHOTO_FILENAME,
-        _REQUIRED_KEY_SCENE_FILTER_FILENAME,
-        _REQUIRED_KEY_SCENE_DONE_FILENAME
+        _KEY_SCENE_CAMERA_FILENAME,
+        _KEY_SCENE_POSTPHOTO_FILENAME,
+        _KEY_SCENE_FILTER_FILENAME,
+        _KEY_SCENE_DONE_FILENAME
     ];
 
     #The frame rate of application.
@@ -80,7 +80,7 @@ class SceneManager(object):
     def __init__(self):
         ## iVars ##
         self._config_filename = None;
-        self._file_contents   = None;
+        self._config_contents = None;
 
         #Pygame related.
         self._screen_surface = None;
@@ -111,9 +111,11 @@ class SceneManager(object):
         self._config_filename = Config.instance().get_scene_manager_config_filename();
 
         #Validate the configuration.
-        self._file_contents = config_validation.validate("SceneManager",
-                                                          self._config_filename,
-                                                          SceneManager._REQUIRED_KEYS);
+        config_info = config_validation.validate("SceneManager",
+                                                  self._config_filename,
+                                                  SceneManager._REQUIRED_KEYS);
+        self._config_contents = DictHelper(config_info);
+
         #Initialize the Pygame.
         self._init_pygame();
 
@@ -235,17 +237,17 @@ class SceneManager(object):
     ############################################################################
     #Window Properties.
     def get_window_size(self):
-        return self._file_contents[SceneManager._REQUIRED_KEY_WINDOW_SIZE];
+        return self._config_contents.value_or_die(SceneManager._KEY_WINDOW_SIZE);
 
     #Scenes Filenames.
     def get_camera_scene_filename(self):
-        return self._file_contents[SceneManager._REQUIRED_KEY_SCENE_CAMERA_FILENAME];
+        return self._config_contents.value_or_die(SceneManager._KEY_SCENE_CAMERA_FILENAME);
     def get_postphoto_scene_filename(self):
-        return self._file_contents[SceneManager._REQUIRED_KEY_SCENE_POSTPHOTO_FILENAME];
+        return self._config_contents.value_or_die(SceneManager._KEY_SCENE_POSTPHOTO_FILENAME);
     def get_filter_scene_filename(self):
-        return self._file_contents[SceneManager._REQUIRED_KEY_SCENE_FILTER_FILENAME];
+        return self._config_contents.value_or_die(SceneManager._KEY_SCENE_FILTER_FILENAME);
     def get_done_scene_filename(self):
-        return self._file_contents[SceneManager._REQUIRED_KEY_SCENE_DONE_FILENAME];
+        return self._config_contents.value_or_die(SceneManager._KEY_SCENE_DONE_FILENAME);
 
 
     ############################################################################

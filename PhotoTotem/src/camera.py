@@ -31,20 +31,22 @@ import pygame.camera;
 #Project
 import config_validation;
 import filesystem;
-from   config import Config;
-from   logger import Logger;
+from   config      import Config;
+from   logger      import Logger;
+from   dict_helper import DictHelper;
+
 
 class Camera(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
-    _REQUIRED_KEY_RESOLUTION = "camera_resolution";
-    _REQUIRED_KEY_DEVICE     = "camera_device";
+    _KEY_RESOLUTION = "camera_resolution";
+    _KEY_DEVICE     = "camera_device";
 
     _REQUIRED_KEYS = [
-        _REQUIRED_KEY_RESOLUTION,
-        _REQUIRED_KEY_DEVICE,
+        _KEY_RESOLUTION,
+        _KEY_DEVICE,
     ];
 
 
@@ -66,7 +68,7 @@ class Camera(object):
         ## iVars ##
         #Configuration stuff.
         self._config_filename = None;
-        self._file_contents   = None;
+        self._config_contents = None;
         #Camera stuff.
         self._resolution     = None;
         self._device         = None;
@@ -89,15 +91,17 @@ class Camera(object):
         self._config_filename = Config.instance().get_camera_config_filename();
 
         #Validate the configuration.
-        self._file_contents = config_validation.validate("Camera",
+        config_info = config_validation.validate("Camera",
                                                           self._config_filename,
                                                           Camera._REQUIRED_KEYS);
 
+        self._config_contents = DictHelper(config_info);
         #Set the values.
-        self._resolution = self._file_contents[Camera._REQUIRED_KEY_RESOLUTION];
-        self._device     = self._file_contents[Camera._REQUIRED_KEY_DEVICE];
+        self._resolution = self._config_contents.value_or_die(Camera._KEY_RESOLUTION);
+        self._device     = self._config_contents.value_or_die(Camera._KEY_DEVICE);
 
         self._init_camera_device();
+
 
     def _init_camera_device(self):
         Logger.instance().log_debug("Camera.init_camera_device");
@@ -131,7 +135,7 @@ class Camera(object):
         pygame.camera.init();
         # #Initialize the camera.
         self._camera = pygame.camera.Camera(self._device,
-                                             self._resolution);
+                                            self._resolution);
         self._camera.start();
         self._camera_surface = self._camera.get_image();
 

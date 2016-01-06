@@ -24,8 +24,9 @@ import getopt;
 import sys;
 #Project
 import config_validation;
-from   gui    import GUI;
-from   logger import Logger;
+from   gui         import GUI;
+from   logger      import Logger;
+from   dict_helper import DictHelper;
 
 
 class Config(object):
@@ -43,16 +44,16 @@ class Config(object):
     ];
 
     #Required keys.
-    _REQUIRED_KEY_CAMERA_FILENAME       = "camera_config_filename";
-    _REQUIRED_KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
-    _REQUIRED_KEY_PHOTO_OUTPUT_FOLDER   = "image_output_folder";
-    _REQUIRED_KEY_RUNTIME_PHOTO_MERGE   = "runtime_photo_merge";
+    _KEY_CAMERA_FILENAME       = "camera_config_filename";
+    _KEY_SCENEMANAGER_FILENAME = "scene_manager_config_filename";
+    _KEY_PHOTO_OUTPUT_FOLDER   = "image_output_folder";
+    _KEY_RUNTIME_PHOTO_MERGE   = "runtime_photo_merge";
 
     _REQUIRED_KEYS = [
-        _REQUIRED_KEY_CAMERA_FILENAME,
-        _REQUIRED_KEY_SCENEMANAGER_FILENAME,
-        _REQUIRED_KEY_PHOTO_OUTPUT_FOLDER,
-        _REQUIRED_KEY_RUNTIME_PHOTO_MERGE,
+        _KEY_CAMERA_FILENAME,
+        _KEY_SCENEMANAGER_FILENAME,
+        _KEY_PHOTO_OUTPUT_FOLDER,
+        _KEY_RUNTIME_PHOTO_MERGE,
     ];
 
 
@@ -74,7 +75,7 @@ class Config(object):
     def __init__(self):
         ## iVars ##
         self._config_filename = None;
-        self._file_contents   = None;
+        self._config_contents  = None;
         self._dummy_camera    = False;
 
 
@@ -105,26 +106,28 @@ class Config(object):
                 self._dummy_camera = True;
 
         #Check if file is valid.
-        self._file_contents = config_validation.validate("Config",
-                                                          self._config_filename,
-                                                          Config._REQUIRED_KEYS);
+        config_info = config_validation.validate("Config",
+                                                 self._config_filename,
+                                                 Config._REQUIRED_KEYS);
+
+        self._config_contents = DictHelper(config_info);
 
 
     ############################################################################
     ## Getters                                                                ##
     ############################################################################
     def get_camera_config_filename(self):
-        return self._file_contents[Config._REQUIRED_KEY_CAMERA_FILENAME];
+        return self._config_contents.value_or_die(Config._KEY_CAMERA_FILENAME);
 
     def get_dummy_camera(self):
         return self._dummy_camera;
 
     def get_scene_manager_config_filename(self):
-        return self._file_contents[Config._REQUIRED_KEY_SCENEMANAGER_FILENAME];
+        return self._config_contents.value_or_die(Config._KEY_SCENEMANAGER_FILENAME);
 
     def get_image_output_path(self):
-        return self._file_contents[Config._REQUIRED_KEY_PHOTO_OUTPUT_FOLDER];
+        return self._config_contents.value_or_die(Config._KEY_PHOTO_OUTPUT_FOLDER);
 
     def get_runtime_merge(self):
-        return self._file_contents[Config._REQUIRED_KEY_RUNTIME_PHOTO_MERGE];
+        return self._config_contents.value_or_die(Config._KEY_RUNTIME_PHOTO_MERGE);
 

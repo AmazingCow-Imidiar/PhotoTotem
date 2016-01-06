@@ -26,23 +26,23 @@ import json;
 #Project
 import config_validation;
 import scene_manager;
-from   logger     import Logger;
-from   camera     import Camera;
-from   base_scene import BaseScene;
-from   widgets    import Sprite;
-from   widgets    import Button;
-from   clock      import BasicClock;
-
+from   logger      import Logger;
+from   camera      import Camera;
+from   base_scene  import BaseScene;
+from   widgets     import Sprite;
+from   widgets     import Button;
+from   clock       import BasicClock;
+from   dict_helper import DictHelper;
 
 class DoneScene(BaseScene):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
-    _REQUIRED_KEY_STATIC_SPRITES = "static_sprites";
+    _KEY_STATIC_SPRITES = "static_sprites";
 
     _REQUIRED_KEYS = [
-        _REQUIRED_KEY_STATIC_SPRITES,
+        _KEY_STATIC_SPRITES,
     ];
 
     #Layers.
@@ -61,7 +61,7 @@ class DoneScene(BaseScene):
         ## iVars ##
         #Filenames and Content.
         self._config_filename = None;
-        self._file_contents   = None;
+        self._config_contents = None;
 
         #Scene timer.
         self._scene_timer = BasicClock(DoneScene._SCENE_TIMER_TIME,
@@ -89,15 +89,17 @@ class DoneScene(BaseScene):
         self._config_filename = scene_manager.SceneManager.instance().get_done_scene_filename();
 
         #Validate the configuration.
-        self._file_contents = config_validation.validate("DoneScene",
-                                                         self._config_filename,
-                                                         DoneScene._REQUIRED_KEYS);
+        config_info = config_validation.validate("DoneScene",
+                                                  self._config_filename,
+                                                  DoneScene._REQUIRED_KEYS);
+        self._config_contents = DictHelper(config_info);
+
         #Init the UI.
         self._init_static_sprites();
 
 
     def _init_static_sprites(self):
-        sprite_list = self._file_contents[DoneScene._REQUIRED_KEY_STATIC_SPRITES];
+        sprite_list = self._config_contents.value_or_die(DoneScene._KEY_STATIC_SPRITES);
         for info in sprite_list:
             #Create the sprite.
             sprite = Sprite();

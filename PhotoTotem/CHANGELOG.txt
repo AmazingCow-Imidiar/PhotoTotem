@@ -1,3 +1,4 @@
 v1.0.00 - Finish up the basic implementation.
 v1.0.01 - Remove the old (unneeded files).
 v1.0.02 - Perform a lot of minor fixes in code.
+v1.0.03 - Add option to flip the display image.

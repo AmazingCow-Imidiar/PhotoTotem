@@ -70,10 +70,11 @@ class Camera(object):
         self._config_filename = None;
         self._config_contents = None;
         #Camera stuff.
-        self._resolution     = None;
-        self._device         = None;
-        self._camera         = None;
-        self._camera_surface = None;
+        self._resolution        = None;
+        self._device            = None;
+        self._camera            = None;
+        self._camera_surface    = None;
+        self._should_flip_image = None;
         #Photos.
         self._last_photo = None;
         #Dummy Camera.
@@ -96,9 +97,12 @@ class Camera(object):
                                                           Camera._REQUIRED_KEYS);
 
         self._config_contents = DictHelper(config_info);
+
         #Set the values.
         self._resolution = self._config_contents.value_or_die(Camera._KEY_RESOLUTION);
         self._device     = self._config_contents.value_or_die(Camera._KEY_DEVICE);
+
+        self._should_flip_image = True;
 
         self._init_camera_device();
 
@@ -183,6 +187,9 @@ class Camera(object):
             #otherwise we just return the old Frame.
             if(self._camera.query_image()):
                 img = self._camera.get_image(self._camera_surface);
+
+        if(self._should_flip_image):
+            img = pygame.transform.flip(img, True, False);
 
         return self._scale_img(img, scale_to);
 

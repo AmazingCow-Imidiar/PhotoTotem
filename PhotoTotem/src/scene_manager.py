@@ -32,15 +32,24 @@ import config_validation;
 from   config          import Config;
 from   logger          import Logger;
 from   clock           import BasicClock;
+from   dict_helper     import DictHelper;
+
 from   camera_scene    import CameraScene;
 from   postphoto_scene import PostPhotoScene;
 from   done_scene      import DoneScene;
-from   dict_helper     import DictHelper;
+from   print_scene     import PrintScene;
 
 class SceneManager(object):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
+    ## Public CONSTATNS ##
+    SCENE_NAME_CAMERA    = "SCENE_NAME_CAMERA";
+    SCENE_NAME_POSTPHOTO = "SCENE_NAME_POSTPHOTO";
+    SCENE_NAME_FILTER    = "SCENE_NAME_FILTER";
+    SCENE_NAME_DONE      = "SCENE_NAME_DONE";
+    SCENE_NAME_PRINT     = "SCENE_NAME_PRINT";
+
     #Window Properties.
     _KEY_WINDOW_SIZE = "window_size";
 
@@ -49,6 +58,7 @@ class SceneManager(object):
     _KEY_SCENE_POSTPHOTO_FILENAME = "scene_postphoto_filename";
     _KEY_SCENE_FILTER_FILENAME    = "scene_filter_filename";
     _KEY_SCENE_DONE_FILENAME      = "scene_done_filename";
+    _KEY_SCENE_PRINT_FILENAME     = "scene_print_filename";
 
     _REQUIRED_KEYS = [
         _KEY_WINDOW_SIZE,
@@ -56,7 +66,8 @@ class SceneManager(object):
         _KEY_SCENE_CAMERA_FILENAME,
         _KEY_SCENE_POSTPHOTO_FILENAME,
         _KEY_SCENE_FILTER_FILENAME,
-        _KEY_SCENE_DONE_FILENAME
+        _KEY_SCENE_DONE_FILENAME,
+        _KEY_SCENE_PRINT_FILENAME,
     ];
 
     #The frame rate of application.
@@ -93,6 +104,7 @@ class SceneManager(object):
         self._scene_postphoto = None;
         self._scene_filter    = None;
         self._scene_done      = None;
+        self._scene_print     = None;
 
         self._scene_current   = None;
 
@@ -208,19 +220,23 @@ class SceneManager(object):
     ############################################################################
     ## Scenes Management                                                      ##
     ############################################################################
-    def scene_camera_complete(self):
-        self._change_scene(self._get_scene_postphoto_instance());
-
-    def scene_postphoto_complete(self, go_back):
-        #If go_back is true, means that user
-        #didn't accepted the taken photo.
-        if(go_back):
+    def scene_is_complete(self, target_scene_name):
+        #Camera.
+        if(target_scene_name == SceneManager.SCENE_NAME_CAMERA):
             self._change_scene(self._get_scene_camera_instance());
-        else:
+
+        #PostPhoto.
+        elif(target_scene_name == SceneManager.SCENE_NAME_POSTPHOTO):
+            self._change_scene(self._get_scene_postphoto_instance());
+
+        #Done.
+        elif(target_scene_name == SceneManager.SCENE_NAME_DONE):
             self._change_scene(self._get_scene_done_instance());
 
-    def scene_done_complete(self):
-        self._change_scene(self._get_scene_camera_instance());
+        #Print.
+        elif(target_scene_name == SceneManager.SCENE_NAME_PRINT):
+            self._change_scene(self._get_scene_print_instance());
+
 
     def _change_scene(self, scene):
         #At first time _scene_current is None.
@@ -247,6 +263,8 @@ class SceneManager(object):
         return self._config_contents.value_or_die(SceneManager._KEY_SCENE_FILTER_FILENAME);
     def get_done_scene_filename(self):
         return self._config_contents.value_or_die(SceneManager._KEY_SCENE_DONE_FILENAME);
+    def get_print_scene_filename(self):
+        return self._config_contents.value_or_die(SceneManager._KEY_SCENE_PRINT_FILENAME);
 
 
     ############################################################################
@@ -263,6 +281,12 @@ class SceneManager(object):
             self._scene_postphoto = PostPhotoScene();
             self._scene_postphoto.init();
         return self._scene_postphoto;
+
+    def _get_scene_print_instance(self):
+        if(self._scene_print is None):
+            self._scene_print = PrintScene();
+            self._scene_print.init();
+        return self._scene_print;
 
     def _get_scene_done_instance(self):
         if(self._scene_done is None):

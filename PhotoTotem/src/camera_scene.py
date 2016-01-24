@@ -277,4 +277,5 @@ class CameraScene(BaseScene):
         Camera.instance().take_photo();
 
         #Go to another scene.
-        scene_manager.SceneManager.instance().scene_camera_complete();
+        scene_mgr = scene_manager.SceneManager;
+        scene_mgr.instance().scene_is_complete(scene_mgr.SCENE_NAME_POSTPHOTO);

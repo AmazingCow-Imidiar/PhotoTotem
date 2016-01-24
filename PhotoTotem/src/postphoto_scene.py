@@ -239,16 +239,27 @@ class PostPhotoScene(BaseScene):
     ## Button Callbacks                                                       ##
     ############################################################################
     def _on_accept_button_pressed(self):
+        self._save_photo_on_disk();
+
+        #Change to other scene.
+        self._change_scene(scene_manager.SceneManager.SCENE_NAME_DONE);
+
+    def _on_reject_button_pressed(self):
+        self._change_scene(scene_manager.SceneManager.SCENE_NAME_CAMERA);
+
+    def _on_print_button_pressed(self):
+        self._change_scene(scene_manager.SceneManager.SCENE_NAME_PRINT);
+
+
+    ############################################################################
+    ## Helper Methods                                                         ##
+    ############################################################################
+    def _change_scene(self, scene_name):
+        self._save_photo_on_disk();
+        scene_manager.SceneManager.instance().scene_is_complete(target_scene_name=scene_name);
+
+    def _save_photo_on_disk(self):
         #Save the photo on disk...
         filesystem.save_photo(Camera.instance().get_last_photo(),
                               use_another_thread = True);
-        #Change to other scene.
-        scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=False);
 
-    def _on_reject_button_pressed(self):
-        scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=True);
-
-    def _on_print_button_pressed(self):
-        #COWTODO: Implement...
-        print "PRINTIIIIINNNNGGGG...."
-        pass;

@@ -3,10 +3,10 @@
 ##                 █      █                                                   ##
 ##                 ████████                                                   ##
 ##               ██        ██                                                 ##
-##              ███  █  █  ███    done_scene.py                               ##
+##              ███  █  █  ███    print_scene.py                              ##
 ##              █ █        █ █    Amazing Photo Totem                         ##
 ##               ████████████                                                 ##
-##             █              █   Copyright (c) 2015, 2016 - AmazingCow       ##
+##             █              █   Copyright (c) 2016 - AmazingCow             ##
 ##            █     █    █     █  www.AmazingCow.com                          ##
 ##            █     █    █     █                                              ##
 ##             █              █   N2OMatt - n2omatt@amazingcow.com            ##
@@ -27,14 +27,13 @@ import json;
 import config_validation;
 import scene_manager;
 from   logger      import Logger;
-from   camera      import Camera;
 from   base_scene  import BaseScene;
 from   widgets     import Sprite;
 from   widgets     import Button;
 from   clock       import BasicClock;
 from   dict_helper import DictHelper;
 
-class DoneScene(BaseScene):
+class PrintScene(BaseScene):
     ############################################################################
     ## Constants                                                              ##
     ############################################################################
@@ -48,10 +47,6 @@ class DoneScene(BaseScene):
     #Layers.
     _LAYER_INDEX_STATIC_SPRITE = 1;
 
-    #How much time the scene will stay active (in ms).
-    _SCENE_TIMER_TIME = 1000;
-
-
     ############################################################################
     ## CTOR                                                                   ##
     ############################################################################
@@ -63,35 +58,28 @@ class DoneScene(BaseScene):
         self._config_filename = None;
         self._config_contents = None;
 
-        #Scene timer.
-        self._scene_timer = BasicClock(DoneScene._SCENE_TIMER_TIME,
-                                       self._on_scene_timer_tick);
-
-
     ############################################################################
     ## Overriden Methods                                                      ##
     ############################################################################
     def start(self):
-        Logger.instance().log_debug("DoneScene.start");
-        #Start the timer just as the scene became active.
-        self._scene_timer.start();
+        Logger.instance().log_debug("PrintScene.start");
 
     def end(self):
-        Logger.instance().log_debug("DoneScene.end");
+        Logger.instance().log_debug("PrintScene.end");
 
 
     ############################################################################
     ## Init                                                                   ##
     ############################################################################
     def init(self):
-        Logger.instance().log_debug("DoneScene.init");
+        Logger.instance().log_debug("PrintScene.init");
 
-        self._config_filename = scene_manager.SceneManager.instance().get_done_scene_filename();
+        self._config_filename = scene_manager.SceneManager.instance().get_print_scene_filename();
 
         #Validate the configuration.
-        config_info = config_validation.validate("DoneScene",
+        config_info = config_validation.validate("PrintScene",
                                                   self._config_filename,
-                                                  DoneScene._REQUIRED_KEYS);
+                                                  PrintScene._REQUIRED_KEYS);
         self._config_contents = DictHelper(config_info);
 
         #Init the UI.
@@ -99,7 +87,7 @@ class DoneScene(BaseScene):
 
 
     def _init_static_sprites(self):
-        sprite_list = self._config_contents.value_or_die(DoneScene._KEY_STATIC_SPRITES);
+        sprite_list = self._config_contents.value_or_die(PrintScene._KEY_STATIC_SPRITES);
         for info in sprite_list:
             #Create the sprite.
             sprite = Sprite();
@@ -109,21 +97,4 @@ class DoneScene(BaseScene):
             sprite.set_position(info["position"]);
 
             #Add to scene.
-            self.add(sprite, layer = DoneScene._LAYER_INDEX_STATIC_SPRITE);
-
-
-    ############################################################################
-    ## Update / Draw / Handle Events                                          ##
-    ############################################################################
-    def update(self, dt):
-        self._scene_timer.update(dt);
-
-
-    ############################################################################
-    ## Timer Callbacks                                                        ##
-    ############################################################################
-    def _on_scene_timer_tick(self):
-        #Go to another scene.
-        scene_mgr = scene_manager.SceneManager;
-        scene_mgr.instance().scene_is_complete(scene_mgr.SCENE_NAME_CAMERA);
-
+            self.add(sprite, layer = PrintScene._LAYER_INDEX_STATIC_SPRITE);

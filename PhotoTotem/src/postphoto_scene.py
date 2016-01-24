@@ -43,18 +43,25 @@ class PostPhotoScene(BaseScene):
     ## Constants                                                              ##
     ############################################################################
     #Required Keys.
+    _KEY_PRINT_IS_ENABLED = "print_enabled";
+
     _KEY_PHOTO_PLACEHOLDER_SPRITE = "photo_placeholder";
     _KEY_PHOTO_FRAME_SPRITE       = "photo_frame";
-    _KEY_ACCEPT_BUTTON            = "accept_button";
-    _KEY_REJECT_BUTTON            = "reject_button";
     _KEY_STATIC_SPRITES           = "static_sprites";
 
+    _KEY_ACCEPT_BUTTON = "accept_button";
+    _KEY_REJECT_BUTTON = "reject_button";
+    _KEY_PRINT_BUTTON  = "print_button";
+
     _REQUIRED_KEYS = [
+        _KEY_PRINT_IS_ENABLED,
+
         _KEY_PHOTO_PLACEHOLDER_SPRITE,
         _KEY_PHOTO_FRAME_SPRITE,
+        _KEY_STATIC_SPRITES,
+
         _KEY_ACCEPT_BUTTON,
         _KEY_REJECT_BUTTON,
-        _KEY_STATIC_SPRITES,
     ];
 
     #Layers.
@@ -78,6 +85,8 @@ class PostPhotoScene(BaseScene):
         #UI Elements.
         self._accept_button = None;
         self._reject_button = None;
+        self._print_button  = None;
+
         self._photo_sprite  = None;
         self._frame_sprite  = None;
 
@@ -174,11 +183,10 @@ class PostPhotoScene(BaseScene):
                  layer = PostPhotoScene._LAYER_INDEX_FRAME_SPRITE);
 
     def _init_buttons(self):
+        ## Initialize the Accept and Reject Buttons. ##
         #Get the infos.
         accept_info = self._config_contents.value_or_die(PostPhotoScene._KEY_ACCEPT_BUTTON);
         reject_info = self._config_contents.value_or_die(PostPhotoScene._KEY_REJECT_BUTTON);
-
-        #COWTODO: Implement the print button.
 
         #Initialize the buttons.
         self._accept_button = self._create_button_helper(accept_info,
@@ -186,6 +194,17 @@ class PostPhotoScene(BaseScene):
 
         self._reject_button = self._create_button_helper(reject_info,
                                                          self._on_reject_button_pressed);
+
+
+        ## Initialize the Print Button. ##
+        #Print isn't enabled, there is no need to continue.
+        if(not self._config_contents.value_or_die(PostPhotoScene._KEY_PRINT_IS_ENABLED)):
+            return;
+
+        print_info = self._config_contents.value_or_die(PostPhotoScene._KEY_PRINT_BUTTON);
+        self._print_button = self._create_button_helper(print_info,
+                                                        self._on_print_button_pressed);
+
 
     def _create_button_helper(self, info, callback):
         button = Button();
@@ -207,8 +226,13 @@ class PostPhotoScene(BaseScene):
     ## Update / Draw / Handle Events                                          ##
     ############################################################################
     def handle_events(self, event):
+        #Those buttons are *always* present.
         self._accept_button.handle_events(event);
         self._reject_button.handle_events(event);
+
+        #The print button depends if print is enabled or not.
+        if(self._print_button is not None):
+            self._print_button.handle_events(event);
 
 
     ############################################################################
@@ -223,3 +247,8 @@ class PostPhotoScene(BaseScene):
 
     def _on_reject_button_pressed(self):
         scene_manager.SceneManager.instance().scene_postphoto_complete(go_back=True);
+
+    def _on_print_button_pressed(self):
+        #COWTODO: Implement...
+        print "PRINTIIIIINNNNGGGG...."
+        pass;

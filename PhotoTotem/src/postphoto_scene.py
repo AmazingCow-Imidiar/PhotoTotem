@@ -248,6 +248,7 @@ class PostPhotoScene(BaseScene):
         self._change_scene(scene_manager.SceneManager.SCENE_NAME_CAMERA);
 
     def _on_print_button_pressed(self):
+        self._save_photo_on_disk();
         self._change_scene(scene_manager.SceneManager.SCENE_NAME_PRINT);
 
 
@@ -255,7 +256,6 @@ class PostPhotoScene(BaseScene):
     ## Helper Methods                                                         ##
     ############################################################################
     def _change_scene(self, scene_name):
-        self._save_photo_on_disk();
         scene_manager.SceneManager.instance().scene_is_complete(target_scene_name=scene_name);
 
     def _save_photo_on_disk(self):

@@ -19,6 +19,11 @@
 ##                                  Enjoy :)                                  ##
 ##----------------------------------------------------------------------------##
 ## Imports ##
+#Python
+import os;
+from multiprocessing import Process;
+#Project
+from   logger      import Logger;
 
 class PrinterManager(object):
     ############################################################################
@@ -54,18 +59,23 @@ class PrinterManager(object):
     ############################################################################
     ## Public Methods                                                         ##
     ############################################################################
-    def print_photo(photo_filename, callback):
+    def print_photo(self, photo_filename, callback):
         msg = "PrinterManager.print_photo - {}".format(photo_filename);
         Logger.instance().log_debug(msg);
 
-        #Set the callback.
-        self._print_job_done_callback = callback;
-
         ##COWTODO: Print....
+        p = Process(target = self._print,
+                    args   = (photo_filename, callback));
+        p.start();
 
+    ##
+    def _print(self, photo_filename, callback):
         #Check if anyone is listening that the print is done
         #and inform them the completion.
         #Set the callback as None to not hold any refs...
-        if(self._print_job_done_callback is not None):
-            self._print_job_done_callback();
-            self._print_job_done_callback = None;
+        print "PRINTING... ", photo_filename;
+        os.system("ls -1 /home/n2omatt/Documents/Projects/AmazingCow/Proprietary/CuteQuotes/CuteQuotes/programs/favq_fetcher/quotes_download");
+        os.system("ls -1 /home/n2omatt/Documents/Projects/AmazingCow/Proprietary/CuteQuotes/CuteQuotes/programs/favq_fetcher/quotes_download");
+        os.system("ls -1 /home/n2omatt/Documents/Projects/AmazingCow/Proprietary/CuteQuotes/CuteQuotes/programs/favq_fetcher/quotes_download");
+
+        callback();

@@ -26,12 +26,15 @@ import json;
 #Project
 import config_validation;
 import scene_manager;
+import printer_manager;
+
 from   logger      import Logger;
 from   base_scene  import BaseScene;
 from   widgets     import Sprite;
 from   widgets     import Button;
 from   clock       import BasicClock;
 from   dict_helper import DictHelper;
+
 
 class PrintScene(BaseScene):
     ############################################################################
@@ -57,6 +60,8 @@ class PrintScene(BaseScene):
         #Filenames and Content.
         self._config_filename = None;
         self._config_contents = None;
+
+        self.a = None;
 
     ############################################################################
     ## Overriden Methods                                                      ##
@@ -86,6 +91,10 @@ class PrintScene(BaseScene):
         self._init_static_sprites();
 
 
+        #Init the print manager.
+        printer_manager.PrinterManager.instance().print_photo("ola_Ateste_mate", self._on_print_completed);
+
+
     def _init_static_sprites(self):
         sprite_list = self._config_contents.value_or_die(PrintScene._KEY_STATIC_SPRITES);
         for info in sprite_list:
@@ -98,3 +107,13 @@ class PrintScene(BaseScene):
 
             #Add to scene.
             self.add(sprite, layer = PrintScene._LAYER_INDEX_STATIC_SPRITE);
+
+            self.a = sprite;
+
+    def update(self, dt):
+        pos = self.a.get_position();
+        pos = pos[0] + (100 * dt), pos[1];
+        self.a.set_position(pos);
+
+    def _on_print_completed(self):
+        print "CCOMDASFSDAFSDAFSDAFDASFDAS";

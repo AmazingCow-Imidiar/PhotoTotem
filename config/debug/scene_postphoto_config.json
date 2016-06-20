@@ -1,7 +1,4 @@
 {
-    "print_enabled" : true,
-
-
     "photo_placeholder" : {
         "position" : [14, 47],
         "image"    : "../imgs/debug/Sprite_CameraPlaceholder.png"
@@ -25,14 +22,6 @@
         "normal_image"  : "../imgs/debug/Button_Delete_Normal.png",
         "pressed_image" : "../imgs/debug/Button_Delete_Pressed.png"
     },
-
-    "print_button" : {
-        "position"      : [100, 330],
-        "normal_image"  : "../imgs/debug/Button_Delete_Normal.png",
-        "pressed_image" : "../imgs/debug/Button_Share_Pressed.png"
-    },
-
-
 
     "static_sprites" : [
         {
